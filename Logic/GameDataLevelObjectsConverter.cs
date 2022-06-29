@@ -172,7 +172,7 @@ public class GameDataLevelObjectsConverter
             Vector2 value = new Vector2(eventKeyframe.eventValues[0], eventKeyframe.eventValues[1]);
             if (eventKeyframe.random != 0)
             {
-                ObjectManager.inst.RandomVector2Parser(eventKeyframe, out value.x, out value.y);
+                value = ObjectManager.inst.RandomVector2Parser(eventKeyframe);
             }
 
             currentValue = relative ? currentValue + value : value;
@@ -199,7 +199,7 @@ public class GameDataLevelObjectsConverter
             float value = eventKeyframe.eventValues[0];
             if (eventKeyframe.random != 0)
             {
-                ObjectManager.inst.RandomFloatParser(eventKeyframe, out value);
+                value = ObjectManager.inst.RandomFloatParser(eventKeyframe);
             }
 
             currentValue = relative ? currentValue + value : value;
