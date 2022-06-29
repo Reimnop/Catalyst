@@ -1,4 +1,7 @@
 # Catalyst
+
+(thank you Rin Chiropteran for the name!)
+
  Next-generation performance mod for Project Arrhythmia - Successor of Potassium
  
  Made for the development & legacy branch
