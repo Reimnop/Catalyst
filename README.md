@@ -30,7 +30,7 @@ Those steps are required because the development branch DLLs are stripped so we 
 
 This mod was made to be a "cleaner code" variation of Potassium, as well as being faster. It is for research purposes, as the original Potassium codebase is a mess and a nightmare to deal with as another person trying to understand Potassium's code
 
-If you're just a casual player, this mod is probably not for you (unless you're extremely desparate for the absolute maximum FPS)
+If you're just a casual player, the development branch is probably not for you (unless you're extremely desparate for the absolute maximum FPS)
 
 If you still want to use Catalyst, check out Legacy Catalyst below
 
