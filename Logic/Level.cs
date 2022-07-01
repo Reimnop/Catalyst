@@ -40,7 +40,7 @@ public class Level
         // Keep a list of alive objects
         aliveObjects = new HashSet<LevelObject>();
         
-        CatalystBase.LogInfo($"Loaded {levelObjects.Count} objects");
+        CatalystBase.LogInfo($"Loaded {levelObjects.Count} objects (original: {gameData.beatmapObjects.Count})");
     }
 
     public void Update(float time)
