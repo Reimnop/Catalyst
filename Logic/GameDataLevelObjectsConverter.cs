@@ -81,7 +81,7 @@ public class GameDataLevelObjectsConverter
         List<LevelParentObject> parentObjects = new List<LevelParentObject>();
 
         GameObject parent = null;
-        if (!string.IsNullOrEmpty(beatmapObject.parent))
+        if (!string.IsNullOrEmpty(beatmapObject.parent) && beatmapObjects.ContainsKey(beatmapObject.parent))
         {
             parent = InitParentChain(beatmapObjects[beatmapObject.parent], parentObjects);
         }
@@ -129,7 +129,7 @@ public class GameDataLevelObjectsConverter
         parentObjects.Add(InitLevelParentObject(beatmapObject, gameObject));
         
         // Has parent - init parent (recursive)
-        if (!string.IsNullOrEmpty(beatmapObject.parent))
+        if (!string.IsNullOrEmpty(beatmapObject.parent) && beatmapObjects.ContainsKey(beatmapObject.parent))
         {
             GameObject parentObject = InitParentChain(beatmapObjects[beatmapObject.parent], parentObjects);
             gameObject.transform.SetParent(parentObject.transform);
