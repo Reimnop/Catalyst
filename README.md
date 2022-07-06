@@ -6,6 +6,8 @@
  
  Made for the development & legacy branch
  
+ **Does not support the Editor!**
+ 
  ## Usage
  
  ### For development branch
