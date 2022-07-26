@@ -1,3 +1,7 @@
+![Logo](logo.png)
+
+(Logo by enchart)
+
 # Catalyst
 
 (thank you Rin Chiropteran for the name!)
