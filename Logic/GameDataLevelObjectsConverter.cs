@@ -34,13 +34,22 @@ public class GameDataLevelObjectsConverter
     {
         this.gameData = gameData;
 
-        beatmapObjects = gameData.beatmapObjects
-            .ToDictionary(x => x.id, x => x);
+        beatmapObjects = new Dictionary<string, BeatmapObject>();
+        
+        foreach (BeatmapObject beatmapObject in gameData.beatmapObjects)
+        {
+            if (beatmapObjects.ContainsKey(beatmapObject.id))
+            {
+                return;
+            }
+            
+            beatmapObjects.Add(beatmapObject.id, beatmapObject);
+        }
         
         // Cache sequences
         cachedSequences = new Dictionary<string, CachedSequences>();
         
-        foreach (BeatmapObject beatmapObject in gameData.beatmapObjects)
+        foreach (BeatmapObject beatmapObject in beatmapObjects.Values)
         {
             CachedSequences collection = new CachedSequences()
             {
