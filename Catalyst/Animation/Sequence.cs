@@ -15,9 +15,6 @@ public class Sequence<T, TResult>
     private readonly Keyframe<T>[] keyframes;
     private readonly Interpolator<T, TResult> interpolator;
 
-    private float lastTime = 0.0f;
-    private int index = 0;
-
     public Sequence(IEnumerable<Keyframe<T>> keyframes, Interpolator<T, TResult> interpolator)
     {
         this.interpolator = interpolator;
@@ -53,14 +50,7 @@ public class Sequence<T, TResult>
             return ResultFromSingleKeyframe(keyframes[keyframes.Length - 1]);
         }
 
-        int step = time >= lastTime ? 1 : -1;
-        lastTime = time;
-
-        while (!(time >= keyframes[index].Time && time < keyframes[index + 1].Time))
-        {
-            index += step;
-        }
-
+        int index = Search(time);
         Keyframe<T> first = keyframes[index];
         Keyframe<T> second = keyframes[index + 1];
 
@@ -68,6 +58,34 @@ public class Sequence<T, TResult>
         
         float t = FastMathUtils.InverseLerp(first.Time, second.Time, time);
         return interpolator.Interpolate(first.Value, second.Value, easeFunc(t));
+    }
+    
+    // Binary search for the keyframe pair that contains the given time
+    private int Search(float time)
+    {
+        int low = 0;
+        int high = keyframes.Length - 1;
+
+        while (low <= high)
+        {
+            int mid = (low + high) / 2;
+            float midTime = keyframes[mid].Time;
+
+            if (time < midTime)
+            {
+                high = mid - 1;
+            }
+            else if (time > midTime)
+            {
+                low = mid + 1;
+            }
+            else
+            {
+                return mid;
+            }
+        }
+
+        return low - 1;
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

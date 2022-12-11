@@ -150,11 +150,11 @@ public class GameDataLevelObjectsConverter
     private LevelParentObject InitLevelParentObject(BeatmapObject beatmapObject, GameObject gameObject)
     {
         CachedSequences cachedSequences = this.cachedSequences[beatmapObject.id];
-        return new LevelParentObject()
+        return new LevelParentObject
         {
-            PositionSequence = cachedSequences.PositionSequence.Copy(),
-            ScaleSequence = cachedSequences.ScaleSequence.Copy(),
-            RotationSequence = cachedSequences.RotationSequence.Copy(),
+            PositionSequence = cachedSequences.PositionSequence,
+            ScaleSequence = cachedSequences.ScaleSequence,
+            RotationSequence = cachedSequences.RotationSequence,
 
             TimeOffset = beatmapObject.StartTime,
 

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalyst", "Catalyst.csproj", "{C5BABCB7-727A-4485-8B7A-29A33AAEE242}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalyst", "Catalyst/Catalyst.csproj", "{C5BABCB7-727A-4485-8B7A-29A33AAEE242}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
