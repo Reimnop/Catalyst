@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Catalyst.Animation.Interpolation;
+using Catalyst.Animation.Keyframe;
 using Catalyst.Util;
 
 namespace Catalyst.Animation;
@@ -10,25 +10,18 @@ namespace Catalyst.Animation;
 /// <summary>
 /// Sequence class. Stores, manages and interpolates between keyframes.
 /// </summary>
-public class Sequence<T, TResult>
+public class Sequence<T>
 {
-    private readonly Keyframe<T>[] keyframes;
-    private readonly Interpolator<T, TResult> interpolator;
+    private readonly IKeyframe<T>[] keyframes;
 
-    public Sequence(IEnumerable<Keyframe<T>> keyframes, Interpolator<T, TResult> interpolator)
+    public Sequence(IEnumerable<IKeyframe<T>> keyframes)
     {
-        this.interpolator = interpolator;
         this.keyframes = keyframes.ToArray();
-        Array.Sort(this.keyframes);
+        Array.Sort(this.keyframes, (x, y) => x.Time.CompareTo(y.Time));
     }
 
-    public Sequence<T, TResult> Copy()
-    {
-        return new Sequence<T, TResult>(keyframes, interpolator);
-    }
-    
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public TResult Interpolate(float time)
+    public T Interpolate(float time)
     {
         if (keyframes.Length == 0)
         {
@@ -51,13 +44,11 @@ public class Sequence<T, TResult>
         }
 
         int index = Search(time);
-        Keyframe<T> first = keyframes[index];
-        Keyframe<T> second = keyframes[index + 1];
+        IKeyframe<T> first = keyframes[index];
+        IKeyframe<T> second = keyframes[index + 1];
 
-        Func<float, float> easeFunc = Ease.EaseLookup[(int) second.Easing];
-        
         float t = FastMathUtils.InverseLerp(first.Time, second.Time, time);
-        return interpolator.Interpolate(first.Value, second.Value, easeFunc(t));
+        return first.Interpolate(second, t);
     }
     
     // Binary search for the keyframe pair that contains the given time
@@ -89,8 +80,8 @@ public class Sequence<T, TResult>
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private TResult ResultFromSingleKeyframe(Keyframe<T> keyframe)
+    private T ResultFromSingleKeyframe(IKeyframe<T> keyframe)
     {
-        return interpolator.Interpolate(keyframe.Value, keyframe.Value, 0.0f);
+        return keyframe.Interpolate(keyframe, 0.0f);
     }
 }

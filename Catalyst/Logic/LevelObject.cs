@@ -12,7 +12,7 @@ public class LevelObject
     
     public float Depth { get; set; }
 
-    public Sequence<int, Color> ColorSequence { get; set; }
+    public Sequence<Color> ColorSequence { get; set; }
 
     // First element: bottom of the chain
     // Last element: top of the chain

@@ -67,7 +67,7 @@ public class Level
     private void UpdateLevelObject(LevelObject levelObject, float time)
     {
         // Set visual object color
-        Sequence<int, Color> colorSequence = levelObject.ColorSequence;
+        Sequence<Color> colorSequence = levelObject.ColorSequence;
         Color color = colorSequence.Interpolate(time - levelObject.StartTime);
         levelObject.VisualObject.SetColor(color);
         

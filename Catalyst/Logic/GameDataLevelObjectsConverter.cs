@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Catalyst.Animation;
+using Catalyst.Animation.Keyframe;
 using Catalyst.Logic.Visual;
 using UnityEngine;
 
@@ -19,10 +20,10 @@ public class GameDataLevelObjectsConverter
 {
     private class CachedSequences
     {
-        public Sequence<Vector2, Vector2> PositionSequence { get; set; }
-        public Sequence<Vector2, Vector2> ScaleSequence { get; set; }
-        public Sequence<float, float> RotationSequence { get; set; }
-        public Sequence<int, Color> ColorSequence { get; set; }
+        public Sequence<Vector2> PositionSequence { get; set; }
+        public Sequence<Vector2> ScaleSequence { get; set; }
+        public Sequence<float> RotationSequence { get; set; }
+        public Sequence<Color> ColorSequence { get; set; }
     }
 
     private readonly Dictionary<string, CachedSequences> cachedSequences;
@@ -53,15 +54,15 @@ public class GameDataLevelObjectsConverter
         {
             CachedSequences collection = new CachedSequences()
             {
-                PositionSequence = GetVector2Sequence(beatmapObject.events[0], new Keyframe<Vector2>(0.0f, Vector2.zero, Easing.Linear)),
-                ScaleSequence = GetVector2Sequence(beatmapObject.events[1], new Keyframe<Vector2>(0.0f, Vector2.one, Easing.Linear)),
-                RotationSequence = GetFloatSequence(beatmapObject.events[2], new Keyframe<float>(0.0f, 0.0f, Easing.Linear), true)
+                PositionSequence = GetVector2Sequence(beatmapObject.events[0], new Vector2Keyframe(0.0f, Vector2.zero, Ease.Linear)),
+                ScaleSequence = GetVector2Sequence(beatmapObject.events[1], new Vector2Keyframe(0.0f, Vector2.one, Ease.Linear)),
+                RotationSequence = GetFloatSequence(beatmapObject.events[2], new FloatKeyframe(0.0f, 0.0f, Ease.Linear), true)
             };
             
             // Empty objects don't need a color sequence, so it is not cached
             if (beatmapObject.objectType != ObjectType.Empty)
             {
-                collection.ColorSequence = GetColorSequence(beatmapObject.events[3], new Keyframe<int>(0.0f, 0, Easing.Linear));
+                collection.ColorSequence = GetColorSequence(beatmapObject.events[3], new ColorKeyframe(0.0f, 0, Ease.Linear));
             }
             
             cachedSequences.Add(beatmapObject.id, collection);
@@ -171,9 +172,9 @@ public class GameDataLevelObjectsConverter
         };
     }
 
-    private Sequence<Vector2, Vector2> GetVector2Sequence(List<EventKeyframe> eventKeyframes, Keyframe<Vector2> defaultKeyframe, bool relative = false)
+    private Sequence<Vector2> GetVector2Sequence(List<EventKeyframe> eventKeyframes, Vector2Keyframe defaultKeyframe, bool relative = false)
     {
-        List<Keyframe<Vector2>> keyframes = new List<Keyframe<Vector2>>(eventKeyframes.Count);
+        List<IKeyframe<Vector2>> keyframes = new List<IKeyframe<Vector2>>(eventKeyframes.Count);
 
         Vector2 currentValue = Vector2.zero;
         foreach (EventKeyframe eventKeyframe in eventKeyframes)
@@ -186,7 +187,7 @@ public class GameDataLevelObjectsConverter
 
             currentValue = relative ? currentValue + value : value;
             
-            keyframes.Add(new Keyframe<Vector2>(eventKeyframe.eventTime, currentValue, Ease.EaseStringLookup[eventKeyframe.curveType.Name]));
+            keyframes.Add(new Vector2Keyframe(eventKeyframe.eventTime, currentValue, Ease.GetEaseFunction(eventKeyframe.curveType.Name)));
         }
         
         // If there is no keyframe, add default
@@ -195,12 +196,12 @@ public class GameDataLevelObjectsConverter
             keyframes.Add(defaultKeyframe);
         } 
         
-        return new Sequence<Vector2, Vector2>(keyframes, Interpolators.Vector2Interpolator);
+        return new Sequence<Vector2>(keyframes);
     }
 
-    private Sequence<float, float> GetFloatSequence(List<EventKeyframe> eventKeyframes, Keyframe<float> defaultKeyframe, bool relative = false)
+    private Sequence<float> GetFloatSequence(List<EventKeyframe> eventKeyframes, FloatKeyframe defaultKeyframe, bool relative = false)
     {
-        List<Keyframe<float>> keyframes = new List<Keyframe<float>>(eventKeyframes.Count);
+        List<IKeyframe<float>> keyframes = new List<IKeyframe<float>>(eventKeyframes.Count);
 
         float currentValue = 0.0f;
         foreach (EventKeyframe eventKeyframe in eventKeyframes)
@@ -213,7 +214,7 @@ public class GameDataLevelObjectsConverter
 
             currentValue = relative ? currentValue + value : value;
             
-            keyframes.Add(new Keyframe<float>(eventKeyframe.eventTime, currentValue, Ease.EaseStringLookup[eventKeyframe.curveType.Name]));
+            keyframes.Add(new FloatKeyframe(eventKeyframe.eventTime, currentValue, Ease.GetEaseFunction(eventKeyframe.curveType.Name)));
         }
         
         // If there is no keyframe, add default
@@ -222,18 +223,18 @@ public class GameDataLevelObjectsConverter
             keyframes.Add(defaultKeyframe);
         } 
 
-        return new Sequence<float, float>(keyframes, Interpolators.FloatInterpolator);
+        return new Sequence<float>(keyframes);
     }
     
-    private Sequence<int, Color> GetColorSequence(List<EventKeyframe> eventKeyframes, Keyframe<int> defaultKeyframe)
+    private Sequence<Color> GetColorSequence(List<EventKeyframe> eventKeyframes, ColorKeyframe defaultKeyframe)
     {
-        List<Keyframe<int>> keyframes = new List<Keyframe<int>>(eventKeyframes.Count);
+        List<IKeyframe<Color>> keyframes = new List<IKeyframe<Color>>(eventKeyframes.Count);
 
         foreach (EventKeyframe eventKeyframe in eventKeyframes)
         {
             int value = (int) eventKeyframe.eventValues[0];
 
-            keyframes.Add(new Keyframe<int>(eventKeyframe.eventTime, value, Ease.EaseStringLookup[eventKeyframe.curveType.Name]));
+            keyframes.Add(new ColorKeyframe(eventKeyframe.eventTime, value, Ease.GetEaseFunction(eventKeyframe.curveType.Name)));
         }
         
         // If there is no keyframe, add default
@@ -242,6 +243,6 @@ public class GameDataLevelObjectsConverter
             keyframes.Add(defaultKeyframe);
         } 
         
-        return new Sequence<int, Color>(keyframes, Interpolators.ThemeInterpolator);
+        return new Sequence<Color>(keyframes);
     }
 }

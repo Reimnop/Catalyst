@@ -4,91 +4,44 @@ using UnityEngine;
 
 namespace Catalyst.Animation;
 
-public enum Easing
-{
-	Linear,
-	Instant,
-	InSine,
-	OutSine,
-	InOutSine,
-	InElastic,
-	OutElastic,
-	InOutElastic,
-	InBack,
-	OutBack,
-	InOutBack,
-	InBounce,
-	OutBounce,
-	InOutBounce,
-	InQuad,
-	OutQuad,
-	InOutQuad,
-	InCirc,
-	OutCirc,
-	InOutCirc,
-	InExpo,
-	OutExpo,
-	InOutExpo
-}
+public delegate float EaseFunction(float t);
 
 /// <summary>
 /// Static class with useful easer functions that can be used by Tweens.
 /// </summary>
 public static class Ease
 {
-	public static readonly Func<float, float>[] EaseLookup =
+	private static readonly Dictionary<string, EaseFunction> EaseLookup = new Dictionary<string, EaseFunction>()
 	{
-		Linear,
-		Instant,
-		SineIn,
-		SineOut,
-		SineInOut,
-		ElasticIn,
-		ElasticOut,
-		ElasticInOut,
-		BackIn,
-		BackOut,
-		BackInOut,
-		BounceIn,
-		BounceOut,
-		BounceInOut,
-		QuadIn,
-		QuadOut,
-		QuadInOut,
-		CircIn,
-		CircOut,
-		CircInOut,
-		ExpoIn,
-		ExpoOut,
-		ExpoInOut
+		{ "Linear", Linear },
+		{ "Instant", Instant },
+		{ "InSine", SineIn },
+		{ "OutSine", SineOut },
+		{ "InOutSine", SineInOut },
+		{ "InElastic", ElasticIn },
+		{ "OutElastic", ElasticOut },
+		{ "InOutElastic", ElasticInOut },
+		{ "InBack", BackIn },
+		{ "OutBack", BackOut },
+		{ "InOutBack", BackInOut },
+		{ "InBounce", BounceIn },
+		{ "OutBounce", BounceOut },
+		{ "InOutBounce", BounceInOut },
+		{ "InQuad", QuadIn },
+		{ "OutQuad", QuadOut },
+		{ "InOutQuad", QuadInOut },
+		{ "InCirc", CircIn },
+		{ "OutCirc", CircOut },
+		{ "InOutCirc", CircInOut },
+		{ "InExpo", ExpoIn },
+		{ "OutExpo", ExpoOut },
+		{ "InOutExpo", ExpoInOut }
 	};
-	
-	public static readonly Dictionary<string, Easing> EaseStringLookup = new Dictionary<string, Easing>()
+
+	public static EaseFunction GetEaseFunction(string name)
 	{
-		{ "Linear", Easing.Linear },
-		{ "Instant", Easing.Instant },
-		{ "InSine", Easing.InSine },
-		{ "OutSine", Easing.OutSine },
-		{ "InOutSine", Easing.InOutSine },
-		{ "InElastic", Easing.InElastic },
-		{ "OutElastic", Easing.OutElastic },
-		{ "InOutElastic", Easing.InOutElastic },
-		{ "InBack", Easing.InBack },
-		{ "OutBack", Easing.OutBack },
-		{ "InOutBack", Easing.InOutBack },
-		{ "InBounce", Easing.InBounce },
-		{ "OutBounce", Easing.OutBounce },
-		{ "InOutBounce", Easing.InOutBounce },
-		{ "InQuad", Easing.InQuad },
-		{ "OutQuad", Easing.OutQuad },
-		{ "InOutQuad", Easing.InOutQuad },
-		{ "InCirc", Easing.InCirc },
-		{ "OutCirc", Easing.OutCirc },
-		{ "InOutCirc", Easing.InOutCirc },
-		{ "InExpo", Easing.InExpo },
-		{ "OutExpo", Easing.OutExpo },
-		{ "InOutExpo", Easing.InOutExpo }
-	};
+		return EaseLookup[name];
+	}
 
 	private const float PI = 3.14159265359f;
 	private const float PI2 = PI / 2;
@@ -102,7 +55,7 @@ public static class Ease
 	/// <summary>
 	/// Ease a value to its target and then back. Use this to wrap another easing function.
 	/// </summary>
-	public static Func<float, float> ToAndFro(Func<float, float> easer)
+	public static Func<float, float> ToAndFro(EaseFunction easer)
 	{
 		return t => ToAndFro(easer(t));
 	}
@@ -130,7 +83,6 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float Instant(float t)
 	{
-		if (t == 1.0f) return 1.0f;
 		return 0.0f;
 	}
 
