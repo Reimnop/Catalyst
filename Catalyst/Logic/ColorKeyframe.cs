@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Catalyst.Util;
+﻿using System.Collections.Generic;
+using Catalyst.Engine.Core.Animation;
+using Catalyst.Engine.Core.Animation.Keyframe;
+using Catalyst.Engine.Math;
 using UnityEngine;
 
-namespace Catalyst.Animation.Keyframe;
+namespace Catalyst.Logic;
 
 /// <summary>
 /// A keyframe that animates a theme color value.
@@ -28,9 +29,9 @@ public struct ColorKeyframe : IKeyframe<Color>
         
         float t = second.Ease(time);
         return new Color(
-            FastMathUtils.Lerp(theme[Value].r, theme[second.Value].r, t),
-            FastMathUtils.Lerp(theme[Value].g, theme[second.Value].g, t),
-            FastMathUtils.Lerp(theme[Value].b, theme[second.Value].b, t),
-            FastMathUtils.Lerp(theme[Value].a, theme[second.Value].a, t));
+            MathF.Lerp(theme[Value].r, theme[second.Value].r, t),
+            MathF.Lerp(theme[Value].g, theme[second.Value].g, t),
+            MathF.Lerp(theme[Value].b, theme[second.Value].b, t),
+            MathF.Lerp(theme[Value].a, theme[second.Value].a, t));
     }
 }

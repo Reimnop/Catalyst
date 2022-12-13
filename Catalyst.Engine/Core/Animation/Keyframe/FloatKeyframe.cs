@@ -1,6 +1,6 @@
-﻿using Catalyst.Util;
+﻿using Catalyst.Engine.Math;
 
-namespace Catalyst.Animation.Keyframe;
+namespace Catalyst.Engine.Core.Animation.Keyframe;
 
 /// <summary>
 /// A keyframe that animates a float value.
@@ -21,6 +21,6 @@ public struct FloatKeyframe : IKeyframe<float>
     public float Interpolate(IKeyframe<float> other, float time)
     {
         FloatKeyframe second = (FloatKeyframe) other;
-        return FastMathUtils.Lerp(Value, second.Value, second.Ease(time));
+        return MathF.Lerp(Value, second.Value, second.Ease(time));
     }
 }

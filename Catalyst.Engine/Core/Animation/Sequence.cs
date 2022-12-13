@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using Catalyst.Animation.Keyframe;
-using Catalyst.Util;
+﻿using System.Runtime.CompilerServices;
+using Catalyst.Engine.Core.Animation.Keyframe;
+using Catalyst.Engine.Math;
 
-namespace Catalyst.Animation;
+namespace Catalyst.Engine.Core.Animation;
 
 /// <summary>
 /// Sequence class. Stores, manages and interpolates between keyframes.
@@ -47,7 +44,7 @@ public class Sequence<T>
         IKeyframe<T> first = keyframes[index];
         IKeyframe<T> second = keyframes[index + 1];
 
-        float t = FastMathUtils.InverseLerp(first.Time, second.Time, time);
+        float t = MathF.InverseLerp(first.Time, second.Time, time);
         return first.Interpolate(second, t);
     }
     

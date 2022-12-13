@@ -8,6 +8,9 @@ public abstract class LevelObject : IDisposable
     public abstract float StartTime { get; }
     public abstract float KillTime { get; }
     public abstract bool Active { get; set; }
-    public abstract void Update(float time); // time param is relative to StartTime
+    
+    /// <param name="time">Relative to StartTime.</param>
+    public abstract void Update(float time);
+    
     public abstract void Dispose();
 }

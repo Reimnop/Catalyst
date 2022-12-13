@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Catalyst.Animation;
+namespace Catalyst.Engine.Core.Animation;
 
 public class NoKeyframeException : Exception
 {

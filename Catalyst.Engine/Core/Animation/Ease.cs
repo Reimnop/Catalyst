@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using Catalyst.Engine.Math;
 
-namespace Catalyst.Animation;
+namespace Catalyst.Engine.Core.Animation;
 
 public delegate float EaseFunction(float t);
 
@@ -95,7 +93,8 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float SineIn(float t)
 	{
-		return (float) (-Math.Cos(PI2 * t) + 1.0);
+		if (t == 1) return 1;
+		return -MathF.Cos(PI2 * t) + 1;
 	}
 
 	/// <summary>
@@ -105,7 +104,7 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float SineOut(float t)
 	{
-		return (float) Math.Sin(PI2 * t);
+		return MathF.Sin(PI2 * t);
 	}
 
 	/// <summary>
@@ -115,7 +114,7 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float SineInOut(float t)
 	{
-		return (float) (-Math.Cos(PI * t) / 2.0 + 0.5);
+		return -MathF.Cos(PI * t) / 2 + 0.5f;
 	}
 
 	#endregion
@@ -129,7 +128,7 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float ElasticIn(float t)
 	{
-		return (float) (Math.Sin(13 * PI2 * t) * Math.Pow(2, 10 * (t - 1)));
+		return (MathF.Sin(13 * PI2 * t) * MathF.Pow(2, 10 * (t - 1)));
 	}
 
 	/// <summary>
@@ -139,7 +138,8 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float ElasticOut(float t)
 	{
-		return (float) (Math.Sin(-13 * PI2 * (t + 1)) * Math.Pow(2, -10 * t) + 1);
+		if (t == 1) return 1;
+		return (MathF.Sin(-13 * PI2 * (t + 1)) * MathF.Pow(2, -10 * t) + 1);
 	}
 
 	/// <summary>
@@ -149,12 +149,12 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float ElasticInOut(float t)
 	{
-		if (t < 0.5f)
+		if (t < 0.5)
 		{
-			return (float) (0.5 * Math.Sin(13 * PI2 * (2 * t)) * Math.Pow(2, 10 * ((2 * t) - 1)));
+			return (0.5f * MathF.Sin(13 * PI2 * (2 * t)) * MathF.Pow(2, 10 * ((2 * t) - 1)));
 		}
 
-		return (float) (0.5 * (Math.Sin(-13 * PI2 * ((2 * t - 1) + 1)) * Math.Pow(2, -10 * (2 * t - 1)) + 2));
+		return (0.5f * (MathF.Sin(-13 * PI2 * ((2 * t - 1) + 1)) * MathF.Pow(2, -10 * (2 * t - 1)) + 2));
 	}
 
 	#endregion
@@ -293,7 +293,7 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float CircIn(float t)
 	{
-		return (-(Mathf.Sqrt(1 - t * t) - 1));
+		return (-(MathF.Sqrt(1 - t * t) - 1));
 	}
 
 	/// <summary>
@@ -303,7 +303,7 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float CircOut(float t)
 	{
-		return (Mathf.Sqrt(1 - (t - 1) * (t - 1)));
+		return (MathF.Sqrt(1 - (t - 1) * (t - 1)));
 	}
 
 	/// <summary>
@@ -313,7 +313,7 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float CircInOut(float t)
 	{
-		return (t <= .5 ? (Mathf.Sqrt(1 - t * t * 4) - 1) / -2 : (Mathf.Sqrt(1 - (t * 2 - 2) * (t * 2 - 2)) + 1) / 2);
+		return (t <= .5 ? (MathF.Sqrt(1 - t * t * 4) - 1) / -2 : (MathF.Sqrt(1 - (t * 2 - 2) * (t * 2 - 2)) + 1) / 2);
 	}
 
 	#endregion
@@ -327,7 +327,7 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float ExpoIn(float t)
 	{
-		return (Mathf.Pow(2, 10 * (t - 1)));
+		return (MathF.Pow(2, 10 * (t - 1)));
 	}
 
 	/// <summary>
@@ -338,7 +338,7 @@ public static class Ease
 	public static float ExpoOut(float t)
 	{
 		if (t == 1) return 1;
-		return (-Mathf.Pow(2, -10 * t) + 1);
+		return (-MathF.Pow(2, -10 * t) + 1);
 	}
 
 	/// <summary>
@@ -349,7 +349,7 @@ public static class Ease
 	public static float ExpoInOut(float t)
 	{
 		if (t == 1) return 1;
-		return (t < .5 ? Mathf.Pow(2, 10 * (t * 2 - 1)) / 2 : (-Mathf.Pow(2, -10 * (t * 2 - 1)) + 2) / 2);
+		return (t < .5 ? MathF.Pow(2, 10 * (t * 2 - 1)) / 2 : (-MathF.Pow(2, -10 * (t * 2 - 1)) + 2) / 2);
 	}
 
 	#endregion

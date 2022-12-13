@@ -1,7 +1,6 @@
-﻿using Catalyst.Util;
-using UnityEngine;
+﻿using Catalyst.Engine.Math;
 
-namespace Catalyst.Animation.Keyframe;
+namespace Catalyst.Engine.Core.Animation.Keyframe;
 
 /// <summary>
 /// A keyframe that animates a Vector2 value.
@@ -22,9 +21,6 @@ public struct Vector2Keyframe : IKeyframe<Vector2>
     public Vector2 Interpolate(IKeyframe<Vector2> other, float time)
     {
         Vector2Keyframe second = (Vector2Keyframe) other;
-        float t = second.Ease(time);
-        return new Vector2(
-            FastMathUtils.Lerp(Value.x, second.Value.x, t),
-            FastMathUtils.Lerp(Value.y, second.Value.y, t));
+        return Vector2.Lerp(Value, second.Value, second.Ease(time));
     }
 }
