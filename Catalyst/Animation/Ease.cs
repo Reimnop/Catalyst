@@ -95,8 +95,7 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float SineIn(float t)
 	{
-		if (t == 1) return 1;
-		return -Mathf.Cos(PI2 * t) + 1;
+		return (float) (-Math.Cos(PI2 * t) + 1.0);
 	}
 
 	/// <summary>
@@ -106,7 +105,7 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float SineOut(float t)
 	{
-		return Mathf.Sin(PI2 * t);
+		return (float) Math.Sin(PI2 * t);
 	}
 
 	/// <summary>
@@ -116,7 +115,7 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float SineInOut(float t)
 	{
-		return -Mathf.Cos(PI * t) / 2 + 0.5f;
+		return (float) (-Math.Cos(PI * t) / 2.0 + 0.5);
 	}
 
 	#endregion
@@ -130,7 +129,7 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float ElasticIn(float t)
 	{
-		return (Mathf.Sin(13 * PI2 * t) * Mathf.Pow(2, 10 * (t - 1)));
+		return (float) (Math.Sin(13 * PI2 * t) * Math.Pow(2, 10 * (t - 1)));
 	}
 
 	/// <summary>
@@ -140,8 +139,7 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float ElasticOut(float t)
 	{
-		if (t == 1) return 1;
-		return (Mathf.Sin(-13 * PI2 * (t + 1)) * Mathf.Pow(2, -10 * t) + 1);
+		return (float) (Math.Sin(-13 * PI2 * (t + 1)) * Math.Pow(2, -10 * t) + 1);
 	}
 
 	/// <summary>
@@ -151,12 +149,12 @@ public static class Ease
 	/// <returns>Eased timescale.</returns>
 	public static float ElasticInOut(float t)
 	{
-		if (t < 0.5)
+		if (t < 0.5f)
 		{
-			return (0.5f * Mathf.Sin(13 * PI2 * (2 * t)) * Mathf.Pow(2, 10 * ((2 * t) - 1)));
+			return (float) (0.5 * Math.Sin(13 * PI2 * (2 * t)) * Math.Pow(2, 10 * ((2 * t) - 1)));
 		}
 
-		return (0.5f * (Mathf.Sin(-13 * PI2 * ((2 * t - 1) + 1)) * Mathf.Pow(2, -10 * (2 * t - 1)) + 2));
+		return (float) (0.5 * (Math.Sin(-13 * PI2 * ((2 * t - 1) + 1)) * Math.Pow(2, -10 * (2 * t - 1)) + 2));
 	}
 
 	#endregion

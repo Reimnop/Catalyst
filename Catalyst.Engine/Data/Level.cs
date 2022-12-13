@@ -1,4 +1,6 @@
-﻿namespace Catalyst.Engine.Data;
+﻿using Catalyst.Engine.Core;
+
+namespace Catalyst.Engine.Data;
 
 /// <summary>
 /// Contains level data.
@@ -19,7 +21,7 @@ public class Level
     }
     
     public void RemoveObject(LevelObject levelObject)
-    {
+    { 
         objects.Remove(levelObject);
         ObjectRemoved?.Invoke(this, levelObject);
     }
