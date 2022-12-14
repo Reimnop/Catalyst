@@ -1,12 +1,12 @@
-﻿using Catalyst.Animation;
+﻿using Catalyst.Engine.Core.Animation;
 using UnityEngine;
 
 namespace Catalyst.Logic;
 
 public class LevelParentObject
 {
-    public Sequence<Vector2> PositionSequence { get; set; }
-    public Sequence<Vector2> ScaleSequence { get; set; }
+    public Sequence<Engine.Math.Vector2> PositionSequence { get; set; }
+    public Sequence<Engine.Math.Vector2> ScaleSequence { get; set; }
     public Sequence<float> RotationSequence { get; set; }
 
     public float TimeOffset { get; set; }

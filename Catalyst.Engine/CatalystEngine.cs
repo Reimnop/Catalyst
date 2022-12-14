@@ -24,18 +24,18 @@ public class CatalystEngine : IDisposable
     {
         objectSpawner.Update(time);
 
-        foreach (LevelObject levelObject in objectSpawner.ActiveObjects)
+        foreach (ILevelObject levelObject in objectSpawner.ActiveObjects)
         {
-            levelObject.Update(time);
+            levelObject.Interpolate(time);
         }
     }
 
-    private void OnObjectInserted(object sender, LevelObject e)
+    private void OnObjectInserted(object sender, ILevelObject e)
     {
         objectSpawner.InsertObject(e);
     }
     
-    private void OnObjectRemoved(object sender, LevelObject e)
+    private void OnObjectRemoved(object sender, ILevelObject e)
     {
         objectSpawner.RemoveObject(e);
     }

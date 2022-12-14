@@ -7,20 +7,30 @@ namespace Catalyst.Engine.Data;
 /// </summary>
 public class Level
 {
-    public IReadOnlyList<LevelObject> Objects => objects.AsReadOnly();
+    public IReadOnlyList<ILevelObject> Objects => objects.AsReadOnly();
 
-    private List<LevelObject> objects = new List<LevelObject>();
+    private List<ILevelObject> objects;
     
-    public event EventHandler<LevelObject>? ObjectInserted;
-    public event EventHandler<LevelObject>? ObjectRemoved;
+    public event EventHandler<ILevelObject>? ObjectInserted;
+    public event EventHandler<ILevelObject>? ObjectRemoved;
+
+    public Level()
+    {
+        objects = new List<ILevelObject>();
+    }
+
+    public Level(IEnumerable<ILevelObject> levelObjects)
+    {
+        objects = levelObjects.ToList();
+    }
     
-    public void InsertObject(LevelObject levelObject)
+    public void InsertObject(ILevelObject levelObject)
     {
         objects.Add(levelObject);
         ObjectInserted?.Invoke(this, levelObject);
     }
     
-    public void RemoveObject(LevelObject levelObject)
+    public void RemoveObject(ILevelObject levelObject)
     { 
         objects.Remove(levelObject);
         ObjectRemoved?.Invoke(this, levelObject);

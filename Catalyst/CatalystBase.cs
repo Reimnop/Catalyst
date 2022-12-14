@@ -14,12 +14,12 @@ public class CatalystBase : BaseUnityPlugin
     
     public const string Guid = "me.reimnop.catalyst";
     public const string Name = "Catalyst";
-    public const string Version = "1.0.2";
+    public const string Version = "2.0.0";
 
     public const string Description = "Next-generation performance mod for Project Arrhythmia - Successor of Potassium";
 
     private Harmony harmony;
-    private Level level;
+    private LevelProcessor levelProcessor;
     
     public static void LogInfo(object msg)
     {
@@ -58,18 +58,19 @@ public class CatalystBase : BaseUnityPlugin
     {
         LogInfo("Loading level");
         
-        level = new Level(DataManager.inst.gameData);
+        levelProcessor = new LevelProcessor(DataManager.inst.gameData);
     }
     
     private void OnLevelEnd()
     {
         LogInfo("Cleaning up level");
         
-        level = null;
+        levelProcessor.Dispose();
+        levelProcessor = null;
     }
 
     private void OnLevelTick()
     {
-        level?.Update(AudioManager.inst.CurrentAudioSource.time);
+        levelProcessor?.Update(AudioManager.inst.CurrentAudioSource.time);
     }
 }

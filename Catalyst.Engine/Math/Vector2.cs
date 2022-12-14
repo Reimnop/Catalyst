@@ -93,7 +93,7 @@ public struct Vector2
     
     public override string ToString()
     {
-        return string.Format("({0}, {1})", X, Y);
+        return $"({X}, {Y})";
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

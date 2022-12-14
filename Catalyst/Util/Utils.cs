@@ -1,4 +1,6 @@
-﻿namespace Catalyst.Util;
+﻿using UnityEngine;
+
+namespace Catalyst.Util;
 
 public static class Utils
 {

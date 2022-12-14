@@ -4,14 +4,14 @@ namespace Catalyst.Logic.Visual;
 
 public class SolidObject : VisualObject
 {
-    public override GameObject GameObject { get; }
+    private readonly GameObject gameObject;
     
     private readonly Material material;
     private readonly float opacity;
 
     public SolidObject(GameObject gameObject, float opacity, bool hasCollider)
     {
-        GameObject = gameObject;
+        this.gameObject = gameObject;
         this.opacity = opacity;
         
         Renderer renderer = gameObject.GetComponent<Renderer>();

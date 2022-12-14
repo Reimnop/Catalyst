@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using Catalyst.Engine.Core;
 using Catalyst.Engine.Core.Animation;
 using Catalyst.Engine.Core.Animation.Keyframe;
 using Catalyst.Logic.Visual;
@@ -69,10 +68,8 @@ public class GameDataLevelObjectsConverter
         }
     }
 
-    public List<LevelObject> ToLevelObjects()
+    public IEnumerable<ILevelObject> ToLevelObjects()
     {
-        List<LevelObject> levelObjects = new List<LevelObject>();
-
         foreach (BeatmapObject beatmapObject in gameData.beatmapObjects)
         {
             if (beatmapObject.objectType == ObjectType.Empty)
@@ -80,10 +77,8 @@ public class GameDataLevelObjectsConverter
                 continue;
             }
             
-            levelObjects.Add(ToLevelObject(beatmapObject));
+            yield return ToLevelObject(beatmapObject);
         }
-        
-        return levelObjects;
     }
 
     private LevelObject ToLevelObject(BeatmapObject beatmapObject)
@@ -98,11 +93,9 @@ public class GameDataLevelObjectsConverter
         
         GameObject baseObject = Object.Instantiate(ObjectManager.inst.objectPrefabs[beatmapObject.shape].options[beatmapObject.shapeOption], parent == null ? null : parent.transform);
         parentObjects.Insert(0, InitLevelParentObject(beatmapObject, baseObject));
-
-        LevelParentObject topParentObject = parentObjects[parentObjects.Count - 1];
-        topParentObject.Transform.SetParent(ObjectManager.inst.objectParent.transform);
-        topParentObject.GameObject.SetActive(false);
         
+        parentObjects[parentObjects.Count - 1].Transform.SetParent(ObjectManager.inst.objectParent.transform);
+
         GameObject visualObject = baseObject.transform.GetChild(0).gameObject;
         visualObject.transform.localPosition = new Vector3(beatmapObject.origin.x, beatmapObject.origin.y, beatmapObject.Depth * 0.1f);
         
@@ -119,18 +112,17 @@ public class GameDataLevelObjectsConverter
             ? new TextObject(visualObject, opacity, beatmapObject.text)
             : new SolidObject(visualObject, opacity, hasCollider);
 
-        return new LevelObject()
-        {
-            StartTime = beatmapObject.StartTime,
-            KillTime = beatmapObject.StartTime + beatmapObject.GetObjectLifeLength(0.0f, true),
-            
-            Depth = beatmapObject.Depth,
-            
-            ColorSequence = cachedSequences[beatmapObject.id].ColorSequence,
-            
-            ParentObjects = parentObjects,
-            VisualObject = visual
-        };
+        LevelObject levelObject = new LevelObject(
+            beatmapObject.StartTime,
+            beatmapObject.StartTime + beatmapObject.GetObjectLifeLength(0.0f, true),
+            cachedSequences[beatmapObject.id].ColorSequence,
+            beatmapObject.Depth,
+            parentObjects,
+            visual);
+        
+        levelObject.SetActive(false);
+        
+        return levelObject;
     }
 
     private GameObject InitParentChain(BeatmapObject beatmapObject, List<LevelParentObject> parentObjects)
@@ -176,18 +168,20 @@ public class GameDataLevelObjectsConverter
     {
         List<IKeyframe<Engine.Math.Vector2>> keyframes = new List<IKeyframe<Engine.Math.Vector2>>(eventKeyframes.Count);
 
-        Vector2 currentValue = Vector2.zero;
+        Engine.Math.Vector2 currentValue = Engine.Math.Vector2.Zero;
         foreach (EventKeyframe eventKeyframe in eventKeyframes)
         {
-            Vector2 value = new Vector2(eventKeyframe.eventValues[0], eventKeyframe.eventValues[1]);
+            Engine.Math.Vector2 value = new Engine.Math.Vector2(eventKeyframe.eventValues[0], eventKeyframe.eventValues[1]);
             if (eventKeyframe.random != 0)
             {
-                currentValue = ObjectManager.inst.RandomVector2Parser(eventKeyframe);
+                ObjectManager.inst.RandomVector2Parser(eventKeyframe, out float x, out float y);
+                value.X = x;
+                value.Y = y;
             }
 
             currentValue = relative ? currentValue + value : value;
             
-            keyframes.Add(new Vector2Keyframe(eventKeyframe.eventTime, new Engine.Math.Vector2(value.x, value.y), Ease.GetEaseFunction(eventKeyframe.curveType.Name)));
+            keyframes.Add(new Vector2Keyframe(eventKeyframe.eventTime, value, Ease.GetEaseFunction(eventKeyframe.curveType.Name)));
         }
         
         // If there is no keyframe, add default
@@ -209,7 +203,7 @@ public class GameDataLevelObjectsConverter
             float value = eventKeyframe.eventValues[0];
             if (eventKeyframe.random != 0)
             {
-                value = ObjectManager.inst.RandomFloatParser(eventKeyframe);
+                ObjectManager.inst.RandomFloatParser(eventKeyframe, out value);
             }
 
             currentValue = relative ? currentValue + value : value;
