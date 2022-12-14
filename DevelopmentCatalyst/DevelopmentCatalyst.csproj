@@ -2,11 +2,12 @@
 
     <PropertyGroup>
         <TargetFramework>net472</TargetFramework>
-        <AssemblyName>Catalyst</AssemblyName>
         <Description>Next-generation performance mod for Project Arrhythmia - Successor of Potassium</Description>
         <Version>1.0.0</Version>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>latest</LangVersion>
+        <PackageId>DevelopmentCatalyst</PackageId>
+        <RootNamespace>Catalyst</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
