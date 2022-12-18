@@ -3,6 +3,7 @@ using BepInEx.IL2CPP;
 using BepInEx.Logging;
 using Catalyst.Logic;
 using Catalyst.Patch;
+using Catalyst.UI;
 using HarmonyLib;
 
 namespace Catalyst;
@@ -16,7 +17,7 @@ public class CatalystBase : BasePlugin
     
     public const string Guid = "me.reimnop.catalyst";
     public const string Name = "Catalyst";
-    public const string Version = "2.0.0";
+    public const string Version = "2.1.0";
 
     public const string Description = "Next-generation performance mod for Project Arrhythmia - Successor of Potassium";
 
@@ -58,6 +59,10 @@ public class CatalystBase : BasePlugin
         
         GameManagerPatch.LevelEnd += OnLevelEnd;
         ObjectManagerPatch.LevelTick += OnLevelTick;
+        
+        // Patch the in-game UI
+        ResourcePatch.Init(harmony);
+        ResourcePatch.RegisterPatcher("menu_yaml_english", new MainMenuEnglishPatcher());
         
         LogInfo($"{Name} is initialized and ready!");
     }
