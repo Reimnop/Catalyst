@@ -13,6 +13,7 @@
     <ItemGroup>
         <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-*" IncludeAssets="compile" />
         <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0" />
+        <PackageReference Include="YamlDotNet" Version="12.3.1" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
@@ -50,9 +51,6 @@
       </Reference>
       <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>UnityEngine.UI.dll</HintPath>
-      </Reference>
-      <Reference Include="YamlDotNet, Version=12.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e">
-        <HintPath>YamlDotNet.dll</HintPath>
       </Reference>
     </ItemGroup>
 </Project>

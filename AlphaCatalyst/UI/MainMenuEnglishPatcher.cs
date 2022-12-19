@@ -34,46 +34,74 @@ public class MainMenuEnglishPatcher : ResourcePatcher
 
     private void AddCatalystCredits(YamlNode root)
     {
+        YamlSequenceNode branches = (YamlSequenceNode) root["branches"];
+        
+        // Add catalyst github branch
+        YamlMappingNode githubBranch = new YamlMappingNode();
+        githubBranch.Add("name", "catalyst_github");
+        
+        YamlMappingNode githubSettings = new YamlMappingNode();
+        githubSettings.Add("type", "normal");
+        githubSettings.Add("clear_screen", "\"true\"");
+        githubBranch.Add("settings", githubSettings);
+        
+        YamlSequenceNode githubElements = new YamlSequenceNode();
+        
+        YamlSequenceNode githubPreSequence = new YamlSequenceNode();
+        githubPreSequence.Add(new YamlScalarNode("media::despawnall"));
+        githubPreSequence.Add(new YamlScalarNode("openlink::https://github.com/Reimnop/Catalyst"));
+        githubElements.Add(githubPreSequence);
+
+        githubElements.Add(new YamlScalarNode(""));
+        githubElements.Add(new YamlScalarNode("Check your browser for the Catalyst GitHub repository!"));
+        
+        YamlSequenceNode githubPostSequence = new YamlSequenceNode();
+        githubPostSequence.Add(new YamlScalarNode("wait::2"));
+        githubPostSequence.Add(new YamlScalarNode("branch::credits_catalyst"));
+        githubElements.Add(githubPostSequence);
+        
+        githubBranch.Add("elements", githubElements);
+        
+        branches.Add(githubBranch);
+
         // Add catalyst credits branch
         YamlMappingNode creditsBranch = new YamlMappingNode();
         creditsBranch.Add("name", "credits_catalyst");
 
-        YamlMappingNode settings = new YamlMappingNode();
-        settings.Add("type", "menu");
-        settings.Add("clear_screen", "\"true\"");
-        creditsBranch.Add("settings", settings);
+        YamlMappingNode creditsSettings = new YamlMappingNode();
+        creditsSettings.Add("type", "menu");
+        creditsSettings.Add("clear_screen", "true");
+        creditsBranch.Add("settings", creditsSettings);
         
-        YamlSequenceNode elements = new YamlSequenceNode();
-        elements.Add(new YamlScalarNode(""));
-        elements.Add(new YamlScalarNode("<size=150%><b>Credits</b> : Catalyst"));
-        elements.Add(new YamlScalarNode("[[alignment:center]]{{bar}}"));
-        elements.Add(new YamlScalarNode(""));
-        elements.Add(new YamlScalarNode("This project was made possible by you, the {{col:#F05355:Project Arrhythmia}} community."));
-        elements.Add(new YamlScalarNode("Thank you for your support! <3"));
-        elements.Add(new YamlScalarNode(""));
-        elements.Add(new YamlScalarNode("[[alignment:right|font-style:bold]]- Reimnop"));
-        elements.Add(new YamlScalarNode(""));
-        elements.Add(new YamlScalarNode("<b>Special thanks</b>"));
-        elements.Add(new YamlScalarNode(" enchart"));
-        elements.Add(new YamlScalarNode(" Crimson Crips"));
-        elements.Add(new YamlScalarNode("[[loop:4]]"));
+        YamlSequenceNode creditsElements = new YamlSequenceNode();
+        creditsElements.Add(new YamlScalarNode(""));
+        creditsElements.Add(new YamlScalarNode("<size=150%><b>Credits</b> - Catalyst"));
+        creditsElements.Add(new YamlScalarNode("[[alignment:center]]{{bar}}"));
+        creditsElements.Add(new YamlScalarNode(""));
+        creditsElements.Add(new YamlScalarNode("This project was made possible by you, the {{col:#F05355:Project Arrhythmia}} community."));
+        creditsElements.Add(new YamlScalarNode("Thank you for your support! <3"));
+        creditsElements.Add(new YamlScalarNode(""));
+        creditsElements.Add(new YamlScalarNode("- Reimnop"));
+        creditsElements.Add(new YamlScalarNode(""));
+        creditsElements.Add(new YamlScalarNode("<mark=#{{ui_theme_border_highlight}}><color=#{{ui_theme_bg}}><b>_Cool People_</b></color></mark>"));
+        creditsElements.Add(new YamlScalarNode("Miv2nir | Eldar | JoshyTM123 | skalt771 | Rainstar | Windows 98"));
+        creditsElements.Add(new YamlScalarNode("<mark=#{{ui_theme_border_highlight}}><color=#{{ui_theme_bg}}><b>_Special Thanks_</b></color></mark>"));
+        creditsElements.Add(new YamlScalarNode("enchart | Crimson Crips | Xenon1345 | GuonuoTW"));
+        creditsElements.Add(new YamlScalarNode("[[loop:2]]"));
         
         YamlMappingNode buttons = new YamlMappingNode();
         YamlSequenceNode buttonsSettings = new YamlSequenceNode();
-        buttonsSettings.Add(new YamlScalarNode("width:0.2"));
-        buttonsSettings.Add(new YamlScalarNode("orientation:horizontal"));
-        buttonsSettings.Add(new YamlScalarNode("alignment:center"));
+        buttonsSettings.Add(new YamlScalarNode("width:0.35"));
         buttons.Add("settings", buttonsSettings);
-        buttons.Add("buttons", "RETURN:credits_menu");
-        elements.Add(buttons);
+        buttons.Add("buttons", " RETURN:credits_menu&& GITHUB ↗:catalyst_github");
+        creditsElements.Add(buttons);
         
-        elements.Add("[[alignment:center]]{{bar}}");
-        elements.Add("[[alignment:right]]{{col:#F05355:Project Arrhythmia}} Unified Operating System | Version {{versionNumber}}");
-        elements.Add(new YamlScalarNode("[[alignment:right]]Powered by {{col:#F05355:Catalyst}} | Version " + CatalystBase.Version));
+        creditsElements.Add("[[alignment:center]]{{bar}}");
+        creditsElements.Add("[[alignment:right]]{{col:#F05355:Project Arrhythmia}} Unified Operating System | Version {{versionNumber}}");
+        creditsElements.Add(new YamlScalarNode("[[alignment:right]]Powered by {{col:#F05355:Catalyst}} | Version " + CatalystBase.Version));
         
-        creditsBranch.Add("elements", elements);
+        creditsBranch.Add("elements", creditsElements);
         
-        YamlSequenceNode branches = (YamlSequenceNode) root["branches"];
         branches.Add(creditsBranch);
         
         // Add catalyst credits button
@@ -100,17 +128,18 @@ public class MainMenuEnglishPatcher : ResourcePatcher
             "arcade_menu",
             "story_mode_selection",
             "confirm_new_game",
-            "credits_thanks",
-            "credits_music",
-            "credits_dev",
             "settings_menu",
             "audio_menu",
             "gameplay_menu",
             "video_menu",
+            "accessibility_menu",
             "credits_menu",
-            "credits_comingsoon",
-            "play_adofai", // this exists in the game files but is never used..?
-            "adofaisettings" // this too ..?
+            "credits_thanks",
+            "credits_music",
+            "credits_art",
+            "credits_translators",
+            "credits_dev",
+            "credits_publisher"
         };
         
         YamlSequenceNode branches = (YamlSequenceNode) root["branches"];
