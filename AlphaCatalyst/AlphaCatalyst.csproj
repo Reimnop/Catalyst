@@ -11,10 +11,30 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-*" IncludeAssets="compile" />
+        <PackageReference Include="HarmonyX" Version="2.10.0" GeneratePathProperty="true" />
+        <PackageReference Include="BepInEx.Core" Version="6.0.0-*" GeneratePathProperty="true" />
+        <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-*" IncludeAssets="compile" GeneratePathProperty="true" />
         <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0" />
-        <PackageReference Include="YamlDotNet" Version="12.3.1" />
+        <PackageReference Include="YamlDotNet" Version="12.3.1" GeneratePathProperty="true" />
+        
+        <!-- Build-time dependencies -->
+        <PackageReference Include="ILRepack" Version="2.0.18" />
     </ItemGroup>
+
+    <!-- Kinda hacky, but it works -->
+    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+    <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+    
+    <!-- Merge all dependencies into one assembly -->
+    <Target Name="AfterBuild">
+        <Exec Command="$(ILRepack) ^
+        /lib:$(PkgHarmonyX)/lib/netstandard2.0 ^
+        /lib:$(PkgBepInEx_Core)/lib/netstandard2.1 ^
+        /lib:$(PkgBepInEx_IL2CPP)/lib/netstandard2.1 ^
+        /out:bin/Release/netstandard2.1/AlphaCatalyst_Merged.dll ^
+        bin/Release/netstandard2.1/AlphaCatalyst.dll ^
+        $(PkgYamlDotNet)/lib/netstandard2.1/YamlDotNet.dll" />
+    </Target>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
