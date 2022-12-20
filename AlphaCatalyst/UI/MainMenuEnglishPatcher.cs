@@ -86,7 +86,7 @@ public class MainMenuEnglishPatcher : ResourcePatcher
         creditsElements.Add(new YamlScalarNode("<mark=#{{ui_theme_border_highlight}}><color=#{{ui_theme_bg}}><b>_Cool People_</b></color></mark>"));
         creditsElements.Add(new YamlScalarNode("Miv2nir | Eldar | JoshyTM123 | skalt771 | Rainstar | Windows 98"));
         creditsElements.Add(new YamlScalarNode("<mark=#{{ui_theme_border_highlight}}><color=#{{ui_theme_bg}}><b>_Special Thanks_</b></color></mark>"));
-        creditsElements.Add(new YamlScalarNode("enchart | Crimson Crips | Xenon1345 | GuonuoTW"));
+        creditsElements.Add(new YamlScalarNode("enchart | Crimson Crips | Xenon1345 | GuonuoTW | Pidge (For this amazing game!)"));
         creditsElements.Add(new YamlScalarNode("[[loop:2]]"));
         
         YamlMappingNode buttons = new YamlMappingNode();

@@ -84,7 +84,7 @@ public class MainMenuEnglishPatcher : ResourcePatcher
         creditsElements.Add(new YamlScalarNode("<b>Cool People</b>"));
         creditsElements.Add(new YamlScalarNode(" Miv2nir | Eldar | JoshyTM123 | skalt771 | Rainstar | Windows 98"));
         creditsElements.Add(new YamlScalarNode("<b>Special Thanks</b>"));
-        creditsElements.Add(new YamlScalarNode(" enchart | Crimson Crips | Xenon1345 | GuonuoTW"));
+        creditsElements.Add(new YamlScalarNode(" enchart | Crimson Crips | Xenon1345 | GuonuoTW | Pidge (For this amazing game!)"));
         creditsElements.Add(new YamlScalarNode("[[loop:3]]"));
         
         YamlMappingNode buttons = new YamlMappingNode();
