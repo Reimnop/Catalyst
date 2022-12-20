@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using Catalyst.Logic;
 using Catalyst.Patch;
+using Catalyst.UI;
 using HarmonyLib;
 
 namespace Catalyst;
@@ -14,13 +15,13 @@ public class CatalystBase : BaseUnityPlugin
     
     public const string Guid = "me.reimnop.catalyst";
     public const string Name = "Catalyst";
-    public const string Version = "2.0.0";
+    public const string Version = "2.1.0";
 
     public const string Description = "Next-generation performance mod for Project Arrhythmia - Successor of Potassium";
 
     private Harmony harmony;
     private LevelProcessor levelProcessor;
-    
+
     public static void LogInfo(object msg)
     {
         Instance.Logger.LogInfo(msg);
@@ -45,12 +46,16 @@ public class CatalystBase : BaseUnityPlugin
         harmony = new Harmony(Guid);
         harmony.PatchAll();
         
+        // Patch the in-game UI
+        ResourcePatch.Init(harmony);
+        ResourcePatch.RegisterPatcher("menu_yaml_english", new MainMenuEnglishPatcher());
+        
         LogInfo("Attaching hooks");
 
         GameManagerPatch.LevelStart += OnLevelStart;
         GameManagerPatch.LevelEnd += OnLevelEnd;
         ObjectManagerPatch.LevelTick += OnLevelTick;
-        
+
         LogInfo($"{Name} is initialized and ready!");
     }
 

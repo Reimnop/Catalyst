@@ -23,9 +23,9 @@ public class GameManagerPatch
         LevelStart?.Invoke();
     }
     
-    [HarmonyPatch("ExitLevel")]
+    [HarmonyPatch("QuitToArcade")]
     [HarmonyPostfix]
-    public static void ExitLevelPostfix()
+    public static void QuitToArcadePostfix()
     {
         if (Utils.IsInEditor())
         {

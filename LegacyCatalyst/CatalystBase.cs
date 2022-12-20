@@ -14,7 +14,7 @@ public class CatalystBase : BaseUnityPlugin
     
     public const string Guid = "me.reimnop.catalyst";
     public const string Name = "Catalyst";
-    public const string Version = "2.0.0";
+    public const string Version = "2.1.0";
 
     public const string Description = "Next-generation performance mod for Project Arrhythmia - Successor of Potassium";
 
@@ -50,7 +50,7 @@ public class CatalystBase : BaseUnityPlugin
         GameManagerPatch.LevelStart += OnLevelStart;
         GameManagerPatch.LevelEnd += OnLevelEnd;
         ObjectManagerPatch.LevelTick += OnLevelTick;
-        
+
         LogInfo($"{Name} is initialized and ready!");
     }
 
