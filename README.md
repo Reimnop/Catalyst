@@ -17,7 +17,17 @@
 - Launch Project Arrhythmia
 - If you have done everything correctly, there should be a `plugins` folder in `<Project Arrhythmia Path>/BepInEx`
 - Close Project Arrhythmia
-- Drop the [LegacyCatalyst DLL](https://github.com/Reimnop/Catalyst/releases) into the `plugins` folder
+- Drop the [LegacyCatalyst DLL](https://github.com/Reimnop/Catalyst/releases) and the [Catalyst.Engine DLL](https://github.com/Reimnop/Catalyst/releases) into the `plugins` folder
+- The mod is now installed, you can now enjoy your boosted framerate
+
+### For alpha (or none) branch
+
+- Download [BepInEx 6 x64 IL2CPP](https://github.com/BepInEx/BepInEx/releases)
+- Extract the downloaded zip file into `<Project Arrhythmia Path>`
+- Launch Project Arrhythmia
+- If you have done everything correctly, there should be a `plugins` folder in `<Project Arrhythmia Path>/BepInEx`
+- Close Project Arrhythmia
+- Drop the [AlphaCatalyst DLL](https://github.com/Reimnop/Catalyst/releases) and the [Catalyst.Engine DLL](https://github.com/Reimnop/Catalyst/releases) into the `plugins` folder
 - The mod is now installed, you can now enjoy your boosted framerate
  
  ### For development branch
@@ -35,5 +45,5 @@ Those steps are required because the development branch DLLs are stripped so we 
 - Launch Project Arrhythmia
 - If you have done everything correctly, there should be a `plugins` folder in `<Project Arrhythmia Path>/BepInEx`
 - Close Project Arrhythmia
-- Drop the [Catalyst DLL](https://github.com/Reimnop/Catalyst/releases) into the `plugins` folder
+- Drop the [DevelopmentCatalyst DLL](https://github.com/Reimnop/Catalyst/releases) and the [Catalyst.Engine DLL](https://github.com/Reimnop/Catalyst/releases) into the `plugins` folder
 - The mod is now installed, you can now enjoy your boosted framerate
