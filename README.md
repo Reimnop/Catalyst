@@ -20,7 +20,9 @@
 - Drop the [LegacyCatalyst DLL](https://github.com/Reimnop/Catalyst/releases) and the [Catalyst.Engine DLL](https://github.com/Reimnop/Catalyst/releases) into the `plugins` folder
 - The mod is now installed, you can now enjoy your boosted framerate
 
-### For alpha (or none) branch
+### For default branch
+
+> [As of December 28th, 2022, this mod no longer works on `editor-alpha` branch due to BepInEx not working properly on it. Unfortunately, there is nothing that can be done on my side and requires BepInEx to fix it on their side.](https://github.com/BepInEx/BepInEx/issues/536)
 
 - Download [BepInEx 6 x64 IL2CPP](https://github.com/BepInEx/BepInEx/releases)
 - Extract the downloaded zip file into `<Project Arrhythmia Path>`
