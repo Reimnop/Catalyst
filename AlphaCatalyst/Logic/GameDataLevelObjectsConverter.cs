@@ -1,4 +1,6 @@
-﻿using Il2CppSystem.Collections.Generic;
+﻿using System;
+using System.Text;
+using Il2CppSystem.Collections.Generic;
 using Catalyst.Engine.Core;
 using Catalyst.Engine.Core.Animation;
 using Catalyst.Engine.Core.Animation.Keyframe;
@@ -77,7 +79,26 @@ public class GameDataLevelObjectsConverter
                 continue;
             }
             
-            yield return ToLevelObject(beatmapObject);
+            // Bandaid fix for invalid objects
+            LevelObject levelObject = null;
+            try
+            {
+                levelObject = ToLevelObject(beatmapObject);
+            }
+            catch (Exception e)
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.AppendLine($"Failed to convert object '{beatmapObject.id}' to {nameof(LevelObject)}.");
+                stringBuilder.AppendLine($"Exception: {e.Message}");
+                stringBuilder.AppendLine(e.StackTrace);
+                
+                CatalystBase.LogError(stringBuilder.ToString());
+            }
+            
+            if (levelObject != null)
+            {
+                yield return levelObject;
+            }
         }
     }
 
