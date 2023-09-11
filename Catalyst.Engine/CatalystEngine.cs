@@ -1,4 +1,5 @@
-﻿using Catalyst.Engine.Core;
+﻿using System;
+using Catalyst.Engine.Core;
 using Catalyst.Engine.Data;
 
 namespace Catalyst.Engine;

@@ -1,4 +1,6 @@
-﻿using Catalyst.Engine.Math;
+﻿using System;
+using System.Collections.Generic;
+using Catalyst.Engine.Math;
 
 namespace Catalyst.Engine.Core.Animation;
 

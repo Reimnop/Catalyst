@@ -17,9 +17,9 @@ public class CatalystBase : BaseUnityPlugin
     public const string Name = "Catalyst";
     
 #if DEBUG
-    public const string Version = "2.1.1 [DEBUG]";
+    public const string Version = "2.1.2 [DEBUG]";
 #else
-    public const string Version = "2.1.1";
+    public const string Version = "2.1.2";
 #endif
 
     public const string Description = "Next-generation performance mod for Project Arrhythmia - Successor of Potassium";
