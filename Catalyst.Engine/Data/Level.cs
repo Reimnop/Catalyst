@@ -1,4 +1,7 @@
-﻿using Catalyst.Engine.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Catalyst.Engine.Core;
 
 namespace Catalyst.Engine.Data;
 
@@ -7,7 +10,7 @@ namespace Catalyst.Engine.Data;
 /// </summary>
 public class Level
 {
-    public IReadOnlyList<ILevelObject> Objects => objects.AsReadOnly();
+    public IReadOnlyList<ILevelObject> Objects => objects;
 
     private List<ILevelObject> objects;
     

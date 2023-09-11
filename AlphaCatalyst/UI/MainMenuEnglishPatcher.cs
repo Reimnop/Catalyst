@@ -151,7 +151,7 @@ public class MainMenuEnglishPatcher : ResourcePatcher
                 CatalystBase.LogInfo($"Patching main menu UI element [{name}]");
                 
                 YamlSequenceNode elements = (YamlSequenceNode) node["elements"];
-                elements.Add(new YamlScalarNode($"[[alignment:right]]Powered by {{col:#F05355:Catalyst}} | Version {CatalystBase.Version}"));
+                elements.Add(new YamlScalarNode($"[[alignment:right]]Powered by {{{{col:#F05355:Catalyst}}}} | Version {CatalystBase.Version}"));
             }
         }
     }

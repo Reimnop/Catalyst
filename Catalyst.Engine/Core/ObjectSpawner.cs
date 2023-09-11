@@ -1,4 +1,7 @@
-﻿namespace Catalyst.Engine.Core;
+﻿using System;
+using System.Collections.Generic;
+
+namespace Catalyst.Engine.Core;
 
 /// <summary>
 /// Handles object spawning and despawning.
@@ -20,7 +23,7 @@ public class ObjectSpawner
     {
         // populate activate and deactivate lists
         activateList.AddRange(levelObjects);
-        deactivateList.AddRange(levelObjects);
+        deactivateList.AddRange(activateList);
 
         // sort by start time
         activateList.Sort((a, b) => a.StartTime.CompareTo(b.StartTime));
