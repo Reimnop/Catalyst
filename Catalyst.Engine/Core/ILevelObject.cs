@@ -5,11 +5,19 @@
 /// </summary>
 public interface ILevelObject
 {
-    public float StartTime { get; }
-    public float KillTime { get; }
+    float StartTime { get; }
+    float KillTime { get; }
     
-    public void SetActive(bool active);
+    /// <summary>
+    /// Called when the object enters the level. (spawned)
+    /// </summary>
+    void EnterLevel();
+    
+    /// <summary>
+    /// Called when the object exits the level. (killed)
+    /// </summary>
+    void ExitLevel();
 
     /// <param name="time">Seconds since the level has started.</param>
-    public void Interpolate(float time);
+    void UpdateTime(float time);
 }

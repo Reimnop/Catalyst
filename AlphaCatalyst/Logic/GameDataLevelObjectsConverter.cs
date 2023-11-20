@@ -141,7 +141,7 @@ public class GameDataLevelObjectsConverter
             parentObjects,
             visual);
         
-        levelObject.SetActive(false);
+        levelObject.EnterLevel(false);
         
         return levelObject;
     }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Catalyst.Engine.Core.Animation.Keyframe;
+﻿namespace Catalyst.Engine.Core.Animation.Keyframe;
 
 /// <summary>
 /// A keyframe.

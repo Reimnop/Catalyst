@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Catalyst.Engine.Core.Animation.Keyframe;
-using Catalyst.Engine.Math;
 
 namespace Catalyst.Engine.Core.Animation;
 
@@ -38,29 +37,28 @@ public class Sequence<T>
             return ResultFromSingleKeyframe(keyframes[0]);
         }
         
-        if (time >= keyframes[keyframes.Length - 1].Time)
+        if (time >= keyframes[^1].Time)
         {
-            return ResultFromSingleKeyframe(keyframes[keyframes.Length - 1]);
+            return ResultFromSingleKeyframe(keyframes[^1]);
         }
 
-        int index = Search(time);
-        IKeyframe<T> first = keyframes[index];
-        IKeyframe<T> second = keyframes[index + 1];
-
-        float t = MathF.InverseLerp(first.Time, second.Time, time);
+        var index = Search(time);
+        var first = keyframes[index];
+        var second = keyframes[index + 1];
+        var t = InverseLerp(first.Time, second.Time, time);
         return first.Interpolate(second, t);
     }
     
     // Binary search for the keyframe pair that contains the given time
     private int Search(float time)
     {
-        int low = 0;
-        int high = keyframes.Length - 1;
+        var low = 0;
+        var high = keyframes.Length - 1;
 
         while (low <= high)
         {
-            int mid = (low + high) / 2;
-            float midTime = keyframes[mid].Time;
+            var mid = (low + high) / 2;
+            var midTime = keyframes[mid].Time;
 
             if (time < midTime)
             {
@@ -80,8 +78,14 @@ public class Sequence<T>
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private T ResultFromSingleKeyframe(IKeyframe<T> keyframe)
+    private static T ResultFromSingleKeyframe(IKeyframe<T> keyframe)
     {
         return keyframe.Interpolate(keyframe, 0.0f);
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static float InverseLerp(float x, float y, float t)
+    {
+        return (t - x) / (y - x);
     }
 }

@@ -26,12 +26,12 @@ public class LevelObject : ILevelObject
         this.visualObject = visualObject;
     }
     
-    public void SetActive(bool active)
+    public void EnterLevel(bool active)
     {
         parentObjects[parentObjects.Count - 1].GameObject.SetActive(active);
     }
 
-    public void Interpolate(float time)
+    public void UpdateTime(float time)
     {
         // Set visual object color
         Color color = colorSequence.Interpolate(time - StartTime);

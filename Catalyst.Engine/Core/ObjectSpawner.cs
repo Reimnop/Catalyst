@@ -10,14 +10,18 @@ public class ObjectSpawner
 {
     public IEnumerable<ILevelObject> ActiveObjects => activeObjects;
 
-    private readonly List<ILevelObject> activateList = new List<ILevelObject>();
-    private readonly List<ILevelObject> deactivateList = new List<ILevelObject>();
+    private readonly List<ILevelObject> activateList = new();
+    private readonly List<ILevelObject> deactivateList = new();
 
     private int activateIndex = 0;
     private int deactivateIndex = 0;
     private float currentTime = 0.0f;
 
-    private readonly HashSet<ILevelObject> activeObjects = new HashSet<ILevelObject>();
+    private readonly HashSet<ILevelObject> activeObjects = new();
+    
+    // Queues
+    private readonly HashSet<ILevelObject> insertQueue = new();
+    private readonly HashSet<ILevelObject> removeQueue = new();
 
     public ObjectSpawner(IEnumerable<ILevelObject> levelObjects)
     {
@@ -26,14 +30,65 @@ public class ObjectSpawner
         deactivateList.AddRange(activateList);
 
         // sort by start time
-        activateList.Sort((a, b) => a.StartTime.CompareTo(b.StartTime));
+        activateList.Sort(CompareStartTime);
 
         // sort by kill time
-        deactivateList.Sort((a, b) => a.KillTime.CompareTo(b.KillTime));
+        deactivateList.Sort(CompareKillTime);
     }
 
     public void Update(float time)
     {
+        if (insertQueue.Count > 0)
+        {
+            foreach (var levelObject in insertQueue)
+            {
+                activateList.Add(levelObject);
+                deactivateList.Add(levelObject);
+                
+                if (currentTime >= levelObject.StartTime && currentTime < levelObject.KillTime)
+                {
+                    levelObject.EnterLevel();
+                    activeObjects.Add(levelObject);
+                }
+            }
+            
+            // Clear queue
+            insertQueue.Clear();
+            
+            // Sort
+            activateList.Sort(CompareStartTime);
+            deactivateList.Sort(CompareKillTime);
+            
+            // Recalculate indices
+            activateIndex = CalculateIndex(time, activateList, x => x.StartTime);
+            deactivateIndex = CalculateIndex(time, deactivateList, x => x.KillTime);
+        }
+        
+        if (removeQueue.Count > 0)
+        {
+            foreach (var levelObject in removeQueue)
+            {
+                activateList.Remove(levelObject);
+                deactivateList.Remove(levelObject);
+                
+                if (activeObjects.Contains(levelObject))
+                {
+                    levelObject.ExitLevel();
+                    activeObjects.Remove(levelObject);
+                }
+            }
+            
+            // Clear queue
+            removeQueue.Clear();
+            
+            // We don't need to sort here, since we only remove objects,
+            // which means that the lists are still sorted.
+            
+            // Recalculate indices
+            activateIndex = CalculateIndex(time, activateList, x => x.StartTime);
+            deactivateIndex = CalculateIndex(time, deactivateList, x => x.KillTime);
+        }
+        
         if (time >= currentTime)
         {
             UpdateObjectsForward(time);
@@ -47,97 +102,21 @@ public class ObjectSpawner
     }
 
     /// <summary>
-    /// Insert one object only.
+    /// Add an object to insert queue. Will get inserted on next update.
     /// </summary>
     /// <param name="levelObject">The object to insert into.</param>
-    /// <param name="recalculate">Whether should this recalculate object states.</param>
-    public void InsertObject(ILevelObject levelObject, bool recalculate = true)
+    public void QueueInsertObject(ILevelObject levelObject)
     {
-        activateList.Add(levelObject);
-        activateList.Sort((a, b) => a.StartTime.CompareTo(b.StartTime));
-        
-        deactivateList.Add(levelObject);
-        deactivateList.Sort((a, b) => a.KillTime.CompareTo(b.KillTime));
-
-        if (recalculate)
-        {
-            RecalculateObjectStates();
-        }
+        insertQueue.Add(levelObject);
     }
     
     /// <summary>
-    /// Remove one object only.
+    /// Add an object to remove queue. Will get removed on next update.
     /// </summary>
     /// <param name="levelObject">The object to remove from.</param>
-    /// <param name="recalculate">Whether should this recalculate object states.</param>
-    public void RemoveObject(ILevelObject levelObject, bool recalculate = true)
+    public void QueueRemoveObject(ILevelObject levelObject)
     {
-        activateList.Remove(levelObject);
-        deactivateList.Remove(levelObject);
-
-        if (recalculate)
-        {
-            RecalculateObjectStates();
-        }
-    }
-    
-    /// <summary>
-    /// Insert multiple objects.
-    /// </summary>
-    /// <param name="levelObjects">The list of objects to insert into.</param>
-    /// <param name="recalculate">Whether should this recalculate object states.</param>
-    public void InsertObjects(IEnumerable<ILevelObject> levelObjects, bool recalculate = true)
-    {
-        activateList.AddRange(levelObjects);
-        activateList.Sort((a, b) => a.StartTime.CompareTo(b.StartTime));
-        
-        deactivateList.AddRange(levelObjects);
-        deactivateList.Sort((a, b) => a.KillTime.CompareTo(b.KillTime));
-
-        if (recalculate)
-        {
-            RecalculateObjectStates();
-        }
-    }
-
-    /// <summary>
-    /// Remove multiple objects.
-    /// </summary>
-    /// <param name="predicate">The predicate that matches the objects to remove.</param>
-    /// <param name="recalculate">Whether should this recalculate object states.</param>
-    public void RemoveObjects(Predicate<ILevelObject> predicate, bool recalculate = true)
-    {
-        activateList.RemoveAll(predicate);
-        deactivateList.RemoveAll(predicate);
-
-        if (recalculate)
-        {
-            RecalculateObjectStates();
-        }
-    }
-
-    /// <summary>
-    /// Clear all objects.
-    /// </summary>
-    public void Clear()
-    {
-        activateIndex = 0;
-        deactivateIndex = 0;
-        currentTime = 0.0f;
-        activeObjects.Clear();
-        activateList.Clear();
-        deactivateList.Clear();
-    }
-
-    /// <summary>
-    /// Recalculate object states.
-    /// </summary>
-    public void RecalculateObjectStates()
-    {
-        activateIndex = 0;
-        deactivateIndex = 0;
-        activeObjects.Clear();
-        UpdateObjectsForward(currentTime);
+        removeQueue.Add(levelObject);
     }
 
     private void UpdateObjectsForward(float time)
@@ -145,7 +124,7 @@ public class ObjectSpawner
         // Spawn
         while (activateIndex < activateList.Count && time >= activateList[activateIndex].StartTime)
         {
-            activateList[activateIndex].SetActive(true);
+            activateList[activateIndex].EnterLevel();
             activeObjects.Add(activateList[activateIndex]);
             activateIndex++;
         }
@@ -153,7 +132,7 @@ public class ObjectSpawner
         // Despawn
         while (deactivateIndex < deactivateList.Count && time >= deactivateList[deactivateIndex].KillTime)
         {
-            deactivateList[deactivateIndex].SetActive(false);
+            deactivateList[deactivateIndex].ExitLevel();
             activeObjects.Remove(deactivateList[deactivateIndex]);
             deactivateIndex++;
         }
@@ -164,7 +143,7 @@ public class ObjectSpawner
         // Spawn (backwards)
         while (deactivateIndex - 1 >= 0 && time < deactivateList[deactivateIndex - 1].KillTime)
         {
-            deactivateList[deactivateIndex - 1].SetActive(true);
+            deactivateList[deactivateIndex - 1].EnterLevel();
             activeObjects.Add(deactivateList[deactivateIndex - 1]);
             deactivateIndex--;
         }
@@ -172,9 +151,50 @@ public class ObjectSpawner
         // Despawn (backwards)
         while (activateIndex - 1 >= 0 && time < activateList[activateIndex - 1].StartTime)
         {
-            activateList[activateIndex - 1].SetActive(false);
+            activateList[activateIndex - 1].ExitLevel();
             activeObjects.Remove(activateList[activateIndex - 1]);
             activateIndex--;
         }
+    }
+    
+    private static int CalculateIndex(float time, IReadOnlyList<ILevelObject> list, Func<ILevelObject, float> propertyGetter)
+    {
+        // Exit early
+        if (list.Count == 0)
+            return 0;
+        
+        if (list.Count == 1)
+        {
+            var value = propertyGetter(list[0]);
+            return time >= value ? 1 : 0;
+        }
+        
+        var left = 0;
+        var right = list.Count;
+
+        while (left < right)
+        {
+            var mid = (left + right) / 2;
+            var valueLeft = propertyGetter(list[mid - 1]);
+            var valueRight = propertyGetter(list[mid]);
+            if (time >= valueLeft && time < valueRight)
+                return mid;
+            if (time < valueLeft)
+                right = mid - 1;
+            else
+                left = mid + 1;
+        }
+
+        return left;
+    }
+    
+    private static int CompareStartTime(ILevelObject x, ILevelObject y)
+    {
+        return x.StartTime.CompareTo(y.StartTime);
+    }
+    
+    private static int CompareKillTime(ILevelObject x, ILevelObject y)
+    {
+        return x.KillTime.CompareTo(y.KillTime);
     }
 }
