@@ -50,6 +50,11 @@ public class ObjectSpawner : IDisposable
         }
     }
 
+    ~ObjectSpawner()
+    {
+        Dispose();
+    }
+
     private void LevelObjectOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         var levelObject = (ILevelObject) sender!;
@@ -302,5 +307,7 @@ public class ObjectSpawner : IDisposable
         {
             levelObject.PropertyChanged -= LevelObjectOnPropertyChanged;
         }
+        
+        GC.SuppressFinalize(this);
     }
 }
