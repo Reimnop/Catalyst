@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a level object.
 /// </summary>
-public interface ILevelObject
+public interface ILevelObject : INotifyPropertyChanged
 {
     float StartTime { get; }
     float KillTime { get; }

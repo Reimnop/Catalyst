@@ -16,44 +16,26 @@ public class CatalystEngine : IDisposable
     {
         this.levelView = levelView;
         objectSpawner = new ObjectSpawner(levelView);
-        
-        levelView.ObjectInserted += OnObjectInserted;
-        levelView.ObjectRemoved += OnObjectRemoved;
     }
-
+    
     ~CatalystEngine()
     {
-        Dispose(false);
+        Dispose();
     }
 
     public void Update(float time)
     {
         objectSpawner.Update(time);
 
-        foreach (ILevelObject levelObject in objectSpawner.ActiveObjects)
+        foreach (var levelObject in objectSpawner.ActiveObjects)
         {
             levelObject.UpdateTime(time);
         }
     }
 
-    private void OnObjectInserted(object sender, ILevelObject e)
-    {
-        objectSpawner.QueueInsertObject(e);
-    }
-    
-    private void OnObjectRemoved(object sender, ILevelObject e)
-    {
-        objectSpawner.QueueRemoveObject(e);
-    }
-
     public void Dispose()
     {
-        Dispose(true);
-    }
-    
-    protected virtual void Dispose(bool disposing)
-    {
-        levelView.ObjectInserted -= OnObjectInserted;
-        levelView.ObjectRemoved -= OnObjectRemoved;
+        objectSpawner.Dispose();
+        GC.SuppressFinalize(this);
     }
 }
