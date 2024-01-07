@@ -39,7 +39,7 @@ public class GameDataLevelObjectsConverter
 
         beatmapObjects = new Dictionary<string, BeatmapObject>();
         
-        foreach (BeatmapObject beatmapObject in gameData.beatmapObjects)
+        foreach (var beatmapObject in gameData.beatmapObjects)
         {
             if (beatmapObjects.ContainsKey(beatmapObject.id))
             {
@@ -52,9 +52,9 @@ public class GameDataLevelObjectsConverter
         // Cache sequences
         cachedSequences = new Dictionary<string, CachedSequences>();
         
-        foreach (BeatmapObject beatmapObject in beatmapObjects.Values)
+        foreach (var beatmapObject in beatmapObjects.Values)
         {
-            CachedSequences collection = new CachedSequences()
+            var collection = new CachedSequences()
             {
                 PositionSequence = GetVector2Sequence(beatmapObject.events[0], new Vector2Keyframe(0.0f, Vector2.zero, Ease.Linear)),
                 ScaleSequence = GetVector2Sequence(beatmapObject.events[1], new Vector2Keyframe(0.0f, Vector2.one, Ease.Linear)),
@@ -73,7 +73,7 @@ public class GameDataLevelObjectsConverter
 
     public IEnumerable<ILevelObject> ToLevelObjects()
     {
-        foreach (BeatmapObject beatmapObject in gameData.beatmapObjects)
+        foreach (var beatmapObject in gameData.beatmapObjects)
         {
             if (beatmapObject.objectType == ObjectType.Empty)
             {
@@ -88,7 +88,7 @@ public class GameDataLevelObjectsConverter
             }
             catch (Exception e)
             {
-                StringBuilder stringBuilder = new StringBuilder();
+                var stringBuilder = new StringBuilder();
                 stringBuilder.AppendLine($"Failed to convert object '{beatmapObject.id}' to {nameof(LevelObject)}.");
                 stringBuilder.AppendLine($"Exception: {e.Message}");
                 stringBuilder.AppendLine(e.StackTrace);
@@ -142,20 +142,18 @@ public class GameDataLevelObjectsConverter
             parentObjects,
             visual);
         
-        levelObject.EnterLevel();
-        
         return levelObject;
     }
 
     private GameObject InitParentChain(BeatmapObject beatmapObject, List<LevelParentObject> parentObjects)
     {
-        GameObject gameObject = new GameObject(beatmapObject.name);
+        var gameObject = new GameObject(beatmapObject.name);
         parentObjects.Add(InitLevelParentObject(beatmapObject, gameObject));
         
         // Has parent - init parent (recursive)
         if (!string.IsNullOrEmpty(beatmapObject.parent) && beatmapObjects.ContainsKey(beatmapObject.parent))
         {
-            GameObject parentObject = InitParentChain(beatmapObjects[beatmapObject.parent], parentObjects);
+            var parentObject = InitParentChain(beatmapObjects[beatmapObject.parent], parentObjects);
             gameObject.transform.SetParent(parentObject.transform);
         }
 
@@ -164,7 +162,7 @@ public class GameDataLevelObjectsConverter
 
     private LevelParentObject InitLevelParentObject(BeatmapObject beatmapObject, GameObject gameObject)
     {
-        CachedSequences cachedSequences = this.cachedSequences[beatmapObject.id];
+        var cachedSequences = this.cachedSequences[beatmapObject.id];
         return new LevelParentObject
         {
             PositionSequence = cachedSequences.PositionSequence,
@@ -193,10 +191,10 @@ public class GameDataLevelObjectsConverter
         var currentValue = Vector2.zero;
         foreach (var eventKeyframe in eventKeyframes)
         {
-            Vector2 value = new Vector2(eventKeyframe.eventValues[0], eventKeyframe.eventValues[1]);
+            var value = new Vector2(eventKeyframe.eventValues[0], eventKeyframe.eventValues[1]);
             if (eventKeyframe.random != 0)
             {
-                Vector2 random = ObjectManager.inst.RandomVector2Parser(eventKeyframe);
+                var random = ObjectManager.inst.RandomVector2Parser(eventKeyframe);
                 value.x = random.x;
                 value.y = random.y;
             }
@@ -217,12 +215,12 @@ public class GameDataLevelObjectsConverter
 
     private Sequence<float> GetFloatSequence(List<EventKeyframe> eventKeyframes, FloatKeyframe defaultKeyframe, bool relative = false)
     {
-        List<IKeyframe<float>> keyframes = new List<IKeyframe<float>>(eventKeyframes.Count);
+        var keyframes = new List<IKeyframe<float>>(eventKeyframes.Count);
 
-        float currentValue = 0.0f;
+        var currentValue = 0.0f;
         foreach (EventKeyframe eventKeyframe in eventKeyframes)
         {
-            float value = eventKeyframe.eventValues[0];
+            var value = eventKeyframe.eventValues[0];
             if (eventKeyframe.random != 0)
             {
                 value = ObjectManager.inst.RandomFloatParser(eventKeyframe);
