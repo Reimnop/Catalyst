@@ -20,9 +20,9 @@ public static class Ease
 		{ "InElastic", ElasticIn },
 		{ "OutElastic", ElasticOut },
 		{ "InOutElastic", ElasticInOut },
-		{ "InBack", BackIn },
-		{ "OutBack", BackOut },
-		{ "InOutBack", BackInOut },
+		{ "InBack", InBack },
+		{ "OutBack", OutBack },
+		{ "InOutBack", InOutBack },
 		{ "InBounce", BounceIn },
 		{ "OutBounce", BounceOut },
 		{ "InOutBounce", BounceInOut },
@@ -167,9 +167,11 @@ public static class Ease
 	/// </summary>
 	/// <param name="t">Time elapsed.</param>
 	/// <returns>Eased timescale.</returns>
-	public static float BackIn(float t)
+	public static float InBack(float t)
 	{
-		return (t * t * (2.70158f * t - 1.70158f));
+		const float c1 = 1.70158f;
+		const float c3 = c1 + 1.0f;
+		return c3 * t * t * t - c1 * t * t;
 	}
 
 	/// <summary>
@@ -177,9 +179,11 @@ public static class Ease
 	/// </summary>
 	/// <param name="t">Time elapsed.</param>
 	/// <returns>Eased timescale.</returns>
-	public static float BackOut(float t)
+	public static float OutBack(float t)
 	{
-		return (1 - (--t) * (t) * (-2.70158f * t - 1.70158f));
+		const float c1 = 1.70158f;
+		const float c3 = c1 + 1.0f;
+		return 1.0f + c3 * MathF.Pow(t - 1.0f, 3.0f) + c1 * MathF.Pow(t - 1.0f, 2.0f);
 	}
 
 	/// <summary>
@@ -187,12 +191,14 @@ public static class Ease
 	/// </summary>
 	/// <param name="t">Time elapsed.</param>
 	/// <returns>Eased timescale.</returns>
-	public static float BackInOut(float t)
+	public static float InOutBack(float t)
 	{
-		t *= 2;
-		if (t < 1) return (t * t * (2.70158f * t - 1.70158f) / 2);
-		t--;
-		return ((1 - (--t) * (t) * (-2.70158f * t - 1.70158f)) / 2 + .5f);
+		const float c1 = 1.70158f;
+		const float c2 = c1 * 1.525f;
+
+		return t < 0.5f
+			? (MathF.Pow(2.0f * t, 2.0f) * ((c2 + 1.0f) * 2.0f * t - c2)) / 2.0f
+			: (MathF.Pow(2.0f * t - 2.0f, 2.0f) * ((c2 + 1.0f) * (t * 2.0f - 2.0f) + c2) + 2.0f) / 2.0f;
 	}
 
 	#endregion

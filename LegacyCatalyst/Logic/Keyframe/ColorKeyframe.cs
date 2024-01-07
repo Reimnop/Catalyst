@@ -24,9 +24,9 @@ public struct ColorKeyframe : IKeyframe<Color>
         var second = (ColorKeyframe) other;
         var t = second.Ease(time);
         return new Color(
-            Mathf.Lerp(theme[Value].r, theme[second.Value].r, t),
-            Mathf.Lerp(theme[Value].g, theme[second.Value].g, t),
-           Mathf.Lerp(theme[Value].b, theme[second.Value].b, t),
-           Mathf.Lerp(theme[Value].a, theme[second.Value].a, t));
+            Mathf.LerpUnclamped(theme[Value].r, theme[second.Value].r, t),
+            Mathf.LerpUnclamped(theme[Value].g, theme[second.Value].g, t),
+           Mathf.LerpUnclamped(theme[Value].b, theme[second.Value].b, t),
+           Mathf.LerpUnclamped(theme[Value].a, theme[second.Value].a, t));
     }
 }
