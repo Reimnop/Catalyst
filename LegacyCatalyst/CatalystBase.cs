@@ -84,6 +84,6 @@ public class CatalystBase : BaseUnityPlugin
         var currentAudioTime = AudioManager.inst.CurrentAudioSource.time;
         var smoothedTime = Mathf.SmoothDamp(previousAudioTime, currentAudioTime, ref audioTimeVelocity, Time.deltaTime);
         levelProcessor?.Update(smoothedTime);
-        previousAudioTime = currentAudioTime;
+        previousAudioTime = smoothedTime;
     }
 }
