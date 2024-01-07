@@ -21,6 +21,6 @@ public struct FloatKeyframe : IKeyframe<float>
     public float Interpolate(IKeyframe<float> other, float time)
     {
         var otherCasted = (FloatKeyframe) other;
-        return Mathf.Lerp(Value, otherCasted.Value, Ease(time));
+        return Mathf.Lerp(Value, otherCasted.Value, otherCasted.Ease(time));
     }
 }

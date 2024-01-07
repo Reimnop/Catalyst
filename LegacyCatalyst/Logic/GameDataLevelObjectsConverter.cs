@@ -126,8 +126,8 @@ public class GameDataLevelObjectsConverter
         
         // Init visual object wrapper
         var opacity = beatmapObject.objectType == ObjectType.Helper ? 0.35f : 1.0f;
-        var hasCollider = beatmapObject.objectType == ObjectType.Helper ||
-                          beatmapObject.objectType == ObjectType.Decoration;
+        var hasCollider = beatmapObject.objectType != ObjectType.Helper &&
+                          beatmapObject.objectType != ObjectType.Decoration;
         
         // 4 = text object
         VisualObject visual = beatmapObject.shape == 4
@@ -141,6 +141,8 @@ public class GameDataLevelObjectsConverter
             beatmapObject.Depth,
             parentObjects,
             visual);
+        
+        levelObject.ExitLevel();
         
         return levelObject;
     }
@@ -218,7 +220,7 @@ public class GameDataLevelObjectsConverter
         var keyframes = new List<IKeyframe<float>>(eventKeyframes.Count);
 
         var currentValue = 0.0f;
-        foreach (EventKeyframe eventKeyframe in eventKeyframes)
+        foreach (var eventKeyframe in eventKeyframes)
         {
             var value = eventKeyframe.eventValues[0];
             if (eventKeyframe.random != 0)
@@ -242,11 +244,11 @@ public class GameDataLevelObjectsConverter
     
     private Sequence<Color> GetColorSequence(List<EventKeyframe> eventKeyframes, ColorKeyframe defaultKeyframe)
     {
-        List<IKeyframe<Color>> keyframes = new List<IKeyframe<Color>>(eventKeyframes.Count);
+        var keyframes = new List<IKeyframe<Color>>(eventKeyframes.Count);
 
-        foreach (EventKeyframe eventKeyframe in eventKeyframes)
+        foreach (var eventKeyframe in eventKeyframes)
         {
-            int value = (int) eventKeyframe.eventValues[0];
+            var value = (int) eventKeyframe.eventValues[0];
 
             keyframes.Add(new ColorKeyframe(eventKeyframe.eventTime, value, Ease.GetEaseFunction(eventKeyframe.curveType.Name)));
         }

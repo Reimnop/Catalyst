@@ -21,6 +21,6 @@ public struct Vector2Keyframe : IKeyframe<Vector2>
     public Vector2 Interpolate(IKeyframe<Vector2> other, float time)
     {
         var otherCasted = (Vector2Keyframe) other;
-        return Vector2.Lerp(Value, otherCasted.Value, Ease(time));
+        return Vector2.Lerp(Value, otherCasted.Value, otherCasted.Ease(time));
     }
 }

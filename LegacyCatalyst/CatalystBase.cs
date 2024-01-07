@@ -2,6 +2,7 @@
 using Catalyst.Logic;
 using Catalyst.Patch;
 using HarmonyLib;
+using UnityEngine;
 
 namespace Catalyst;
 
@@ -15,15 +16,17 @@ public class CatalystBase : BaseUnityPlugin
     public const string Guid = "me.reimnop.catalyst";
     public const string Name = "Catalyst";
 #if DEBUG
-    public const string Version = "2.1.2 [DEBUG]";
+    public const string Version = "2.2.0 [DEBUG]";
 #else
-    public const string Version = "2.1.2";
+    public const string Version = "2.2.0";
 #endif
 
     public const string Description = "Next-generation performance mod for Project Arrhythmia - Successor of Potassium";
 
     private Harmony harmony;
     private LevelProcessor levelProcessor;
+    
+    private float previousAudioTime;
     
     public static void LogInfo(object msg)
     {
@@ -62,6 +65,7 @@ public class CatalystBase : BaseUnityPlugin
     {
         LogInfo("Loading level");
         
+        previousAudioTime = 0.0f;
         levelProcessor = new LevelProcessor(DataManager.inst.gameData);
     }
     
@@ -75,6 +79,11 @@ public class CatalystBase : BaseUnityPlugin
 
     private void OnLevelTick()
     {
-        levelProcessor?.Update(AudioManager.inst.CurrentAudioSource.time);
+        var currentAudioTime = AudioManager.inst.CurrentAudioSource.time;
+        var audioDeltaTime = currentAudioTime - previousAudioTime;
+        var velocity = audioDeltaTime / Time.deltaTime;
+        var smoothedTime = Mathf.SmoothDamp(previousAudioTime, currentAudioTime, ref velocity, Time.deltaTime);
+        levelProcessor?.Update(smoothedTime);
+        previousAudioTime = currentAudioTime;
     }
 }

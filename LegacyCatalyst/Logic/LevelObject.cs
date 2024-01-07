@@ -40,17 +40,17 @@ public class LevelObject : ILevelObject
     public void UpdateTime(float time)
     {
         // Set visual object color
-        Color color = colorSequence.Interpolate(time - StartTime);
+        var color = colorSequence.Interpolate(time - StartTime);
         visualObject.SetColor(color);
         
         // Update parents
-        float positionOffset = 0.0f;
-        float scaleOffset = 0.0f;
-        float rotationOffset = 0.0f;
+        var positionOffset = 0.0f;
+        var scaleOffset = 0.0f;
+        var rotationOffset = 0.0f;
 
-        bool animatePosition = true;
-        bool animateScale = true;
-        bool animateRotation = true;
+        var animatePosition = true;
+        var animateScale = true;
+        var animateRotation = true;
 
         foreach (var parentObject in parentObjects)
         {

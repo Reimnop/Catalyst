@@ -14,18 +14,14 @@ public class SolidObject : VisualObject
         this.gameObject = gameObject;
         this.opacity = opacity;
         
-        Renderer renderer = gameObject.GetComponent<Renderer>();
+        var renderer = gameObject.GetComponent<Renderer>();
         renderer.enabled = true;
         material = renderer.material;
 
-        if (hasCollider)
+        if (!hasCollider)
         {
-            Collider2D collider2D = gameObject.GetComponent<Collider2D>();
-
-            if (collider2D != null)
-            {
-                Object.Destroy(collider2D);
-            }
+            var collider2D = gameObject.GetComponent<Collider2D>();
+            Object.Destroy(collider2D);
         }
     }
     
