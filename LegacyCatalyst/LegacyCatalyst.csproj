@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net472</TargetFramework>
         <Description>Next-generation performance mod for Project Arrhythmia - Successor of Potassium</Description>
-        <Version>2.1.2</Version>
+        <Version>2.2.0</Version>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>latest</LangVersion>
         <PackageId>LegacyCatalyst</PackageId>
@@ -12,9 +12,28 @@
 
     <ItemGroup>
         <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+        <PackageReference Include="BepInEx.BaseLib" Version="5.4.21" GeneratePathProperty="true" />
         <PackageReference Include="BepInEx.Core" Version="5.*" />
         <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
+        <PackageReference Include="HarmonyX" Version="2.7.0" GeneratePathProperty="true" />
+
+        <!-- Build-time dependencies -->
+        <PackageReference Include="ILRepack" Version="2.0.18" />
     </ItemGroup>
+
+    <!-- Kinda hacky, but it works -->
+    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+    <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+    <!-- Merge all dependencies into one assembly -->
+    <Target Name="AfterBuild">
+        <Exec Command="$(ILRepack) ^
+        /lib:$(PkgBepInEx_BaseLib)/lib/net35 ^
+        /lib:$(PkgHarmonyX)/lib/net45 ^
+        /out:bin/Release/net472/LegacyCatalyst_Merged_$(Version).dll ^
+        bin/Release/net472/LegacyCatalyst.dll ^
+        bin/Release/net472/Catalyst.Engine.dll" />
+    </Target>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
