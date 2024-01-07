@@ -21,8 +21,8 @@ public class GameDataLevelObjectsConverter
 {
     private class CachedSequences
     {
-        public Sequence<Engine.Math.Vector2> PositionSequence { get; set; }
-        public Sequence<Engine.Math.Vector2> ScaleSequence { get; set; }
+        public Sequence<Vector2> PositionSequence { get; set; }
+        public Sequence<Vector2> ScaleSequence { get; set; }
         public Sequence<float> RotationSequence { get; set; }
         public Sequence<Color> ColorSequence { get; set; }
     }
@@ -55,8 +55,8 @@ public class GameDataLevelObjectsConverter
         {
             CachedSequences collection = new CachedSequences()
             {
-                PositionSequence = GetVector2Sequence(beatmapObject.events[0], new Vector2Keyframe(0.0f, Engine.Math.Vector2.Zero, Ease.Linear)),
-                ScaleSequence = GetVector2Sequence(beatmapObject.events[1], new Vector2Keyframe(0.0f, Engine.Math.Vector2.One, Ease.Linear)),
+                PositionSequence = GetVector2Sequence(beatmapObject.events[0], new Vector2Keyframe(0.0f, Vector2.Zero, Ease.Linear)),
+                ScaleSequence = GetVector2Sequence(beatmapObject.events[1], new Vector2Keyframe(0.0f, Vector2.One, Ease.Linear)),
                 RotationSequence = GetFloatSequence(beatmapObject.events[2], new FloatKeyframe(0.0f, 0.0f, Ease.Linear), true)
             };
             
@@ -185,14 +185,14 @@ public class GameDataLevelObjectsConverter
         };
     }
 
-    private Sequence<Engine.Math.Vector2> GetVector2Sequence(List<EventKeyframe> eventKeyframes, Vector2Keyframe defaultKeyframe, bool relative = false)
+    private Sequence<Vector2> GetVector2Sequence(List<EventKeyframe> eventKeyframes, Vector2Keyframe defaultKeyframe, bool relative = false)
     {
-        List<IKeyframe<Engine.Math.Vector2>> keyframes = new List<IKeyframe<Engine.Math.Vector2>>(eventKeyframes.Count);
+        List<IKeyframe<Vector2>> keyframes = new List<IKeyframe<Vector2>>(eventKeyframes.Count);
 
-        Engine.Math.Vector2 currentValue = Engine.Math.Vector2.Zero;
+        Vector2 currentValue = Vector2.Zero;
         foreach (EventKeyframe eventKeyframe in eventKeyframes)
         {
-            Engine.Math.Vector2 value = new Engine.Math.Vector2(eventKeyframe.eventValues[0], eventKeyframe.eventValues[1]);
+            Vector2 value = new Vector2(eventKeyframe.eventValues[0], eventKeyframe.eventValues[1]);
             if (eventKeyframe.random != 0)
             {
                 ObjectManager.inst.RandomVector2Parser(eventKeyframe, out float x, out float y);
@@ -211,7 +211,7 @@ public class GameDataLevelObjectsConverter
             keyframes.Add(defaultKeyframe);
         } 
         
-        return new Sequence<Engine.Math.Vector2>(keyframes);
+        return new Sequence<Vector2>(keyframes);
     }
 
     private Sequence<float> GetFloatSequence(List<EventKeyframe> eventKeyframes, FloatKeyframe defaultKeyframe, bool relative = false)

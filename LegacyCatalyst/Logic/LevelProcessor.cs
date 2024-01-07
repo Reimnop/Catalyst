@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Catalyst.Engine;
 using Catalyst.Engine.Core;
 using Catalyst.Engine.Data;
@@ -10,17 +9,17 @@ namespace Catalyst.Logic;
 
 public class LevelProcessor : IDisposable
 {
-    private readonly Level level;
+    private readonly Level<ILevelObject> level;
     private readonly CatalystEngine engine;
 
     public LevelProcessor(GameData gameData)
     {
         // Convert GameData to LevelObjects
-        GameDataLevelObjectsConverter converter = new GameDataLevelObjectsConverter(gameData);
-        IEnumerable<ILevelObject> levelObjects = converter.ToLevelObjects();
+        var converter = new GameDataLevelObjectsConverter(gameData);
+        var levelObjects = converter.ToLevelObjects();
 
-        level = new Level(levelObjects);
-        engine = new CatalystEngine(level);
+        level = new Level<ILevelObject>(levelObjects);
+        engine = new CatalystEngine(level.View);
 
         CatalystBase.LogInfo($"Loaded {level.Objects.Count} objects (original: {gameData.beatmapObjects.Count})");
     }

@@ -257,35 +257,10 @@ public class ObjectSpawner : IDisposable
         }
     }
     
-    private static int CalculateIndex(float time, IReadOnlyList<ILevelObject> list, Func<ILevelObject, float> propertyGetter)
+    private static int CalculateIndex(float time, List<ILevelObject> list, Func<ILevelObject, float> selector)
     {
-        // Exit early
-        if (list.Count == 0)
-            return 0;
-        
-        if (list.Count == 1)
-        {
-            var value = propertyGetter(list[0]);
-            return time >= value ? 1 : 0;
-        }
-        
-        var left = 0;
-        var right = list.Count;
-
-        while (left < right)
-        {
-            var mid = (left + right) / 2;
-            var valueLeft = propertyGetter(list[mid - 1]);
-            var valueRight = propertyGetter(list[mid]);
-            if (time >= valueLeft && time < valueRight)
-                return mid;
-            if (time < valueLeft)
-                right = mid - 1;
-            else
-                left = mid + 1;
-        }
-
-        return left;
+        var index = list.BinarySearchKey(time, selector, Comparer<float>.Default);
+        return index < 0 ? ~index : index + 1;
     }
     
     private static int CompareStartTime(ILevelObject x, ILevelObject y)
@@ -304,9 +279,7 @@ public class ObjectSpawner : IDisposable
         levelView.ObjectRemoved -= OnObjectRemoved;
         
         foreach (var levelObject in levelView)
-        {
             levelObject.PropertyChanged -= LevelObjectOnPropertyChanged;
-        }
         
         GC.SuppressFinalize(this);
     }

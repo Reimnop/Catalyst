@@ -8,6 +8,7 @@ namespace Catalyst.Logic;
 
 public class LevelObject : ILevelObject
 {
+    public event PropertyChangedEventHandler PropertyChanged;
     public float StartTime { get; }
     public float KillTime { get; }
 
@@ -26,9 +27,14 @@ public class LevelObject : ILevelObject
         this.visualObject = visualObject;
     }
     
-    public void EnterLevel(bool active)
+    public void EnterLevel()
     {
-        parentObjects[parentObjects.Count - 1].GameObject.SetActive(active);
+        parentObjects[parentObjects.Count - 1].GameObject.SetActive(true);
+    }
+
+    public void ExitLevel()
+    {
+        parentObjects[parentObjects.Count - 1].GameObject.SetActive(false);
     }
 
     public void UpdateTime(float time)
@@ -46,20 +52,20 @@ public class LevelObject : ILevelObject
         bool animateScale = true;
         bool animateRotation = true;
 
-        foreach (LevelParentObject parentObject in parentObjects)
+        foreach (var parentObject in parentObjects)
         {
             // If last parent is position parented, animate position
             if (animatePosition)
             {
-                Engine.Math.Vector2 value = parentObject.PositionSequence.Interpolate(time - parentObject.TimeOffset - positionOffset);
-                parentObject.Transform.localPosition = new Vector3(value.X, value.Y, depth * 0.0005f);
+                var value = parentObject.PositionSequence.Interpolate(time - parentObject.TimeOffset - positionOffset);
+                parentObject.Transform.localPosition = new Vector3(value.x, value.y, depth * 0.0005f);
             }
             
             // If last parent is scale parented, animate scale
             if (animateScale)
             {
-                Engine.Math.Vector2 value = parentObject.ScaleSequence.Interpolate(time - parentObject.TimeOffset - scaleOffset);
-                parentObject.Transform.localScale = new Vector3(value.X, value.Y, 1.0f);
+                var value = parentObject.ScaleSequence.Interpolate(time - parentObject.TimeOffset - scaleOffset);
+                parentObject.Transform.localScale = new Vector3(value.x, value.y, 1.0f);
             }
             
             // If last parent is rotation parented, animate rotation
@@ -79,5 +85,13 @@ public class LevelObject : ILevelObject
             animateScale = parentObject.ParentAnimateScale;
             animateRotation = parentObject.ParentAnimateRotation;
         }
+    }
+    
+    public void SetProperty<T>(ref T field, T value, string propertyName = "")
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value))
+            return;
+        field = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

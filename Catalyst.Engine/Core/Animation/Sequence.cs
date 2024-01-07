@@ -37,9 +37,9 @@ public class Sequence<T>
             return ResultFromSingleKeyframe(keyframes[0]);
         }
         
-        if (time >= keyframes[^1].Time)
+        if (time >= keyframes[keyframes.Length - 1].Time)
         {
-            return ResultFromSingleKeyframe(keyframes[^1]);
+            return ResultFromSingleKeyframe(keyframes[keyframes.Length - 1]);
         }
 
         var index = Search(time);

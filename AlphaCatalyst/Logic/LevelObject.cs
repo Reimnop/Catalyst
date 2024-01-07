@@ -51,14 +51,14 @@ public class LevelObject : ILevelObject
             // If last parent is position parented, animate position
             if (animatePosition)
             {
-                Engine.Math.Vector2 value = parentObject.PositionSequence.Interpolate(time - parentObject.TimeOffset - positionOffset);
+                Vector2 value = parentObject.PositionSequence.Interpolate(time - parentObject.TimeOffset - positionOffset);
                 parentObject.Transform.localPosition = new Vector3(value.X, value.Y, depth * 0.0005f);
             }
             
             // If last parent is scale parented, animate scale
             if (animateScale)
             {
-                Engine.Math.Vector2 value = parentObject.ScaleSequence.Interpolate(time - parentObject.TimeOffset - scaleOffset);
+                Vector2 value = parentObject.ScaleSequence.Interpolate(time - parentObject.TimeOffset - scaleOffset);
                 parentObject.Transform.localScale = new Vector3(value.X, value.Y, 1.0f);
             }
             

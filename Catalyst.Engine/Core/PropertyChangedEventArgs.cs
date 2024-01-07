@@ -3,13 +3,9 @@
 public class PropertyChangedEventArgs
 {
     public string PropertyName { get; }
-    public object? OldValue { get; }
-    public object? NewValue { get; }
     
-    public PropertyChangedEventArgs(string propertyName, object? oldValue, object? newValue)
+    public PropertyChangedEventArgs(string propertyName)
     {
         PropertyName = propertyName;
-        OldValue = oldValue;
-        NewValue = newValue;
     }
 }
