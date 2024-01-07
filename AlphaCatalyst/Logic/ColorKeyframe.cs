@@ -1,6 +1,5 @@
 ﻿using Catalyst.Engine.Core.Animation;
 using Catalyst.Engine.Core.Animation.Keyframe;
-using Catalyst.Engine.Math;
 using Il2CppSystem.Collections.Generic;
 using UnityEngine;
 
@@ -24,14 +23,14 @@ public struct ColorKeyframe : IKeyframe<Color>
 
     public Color Interpolate(IKeyframe<Color> other, float time)
     {
-        List<Color> theme = GameManager.inst.LiveTheme.objectColors;
-        ColorKeyframe second = (ColorKeyframe) other;
+        var theme = GameManager.inst.LiveTheme.objectColors;
+        var second = (ColorKeyframe) other;
         
-        float t = second.Ease(time);
+        var t = second.Ease(time);
         return new Color(
-            MathF.Lerp(theme[Value].r, theme[second.Value].r, t),
-            MathF.Lerp(theme[Value].g, theme[second.Value].g, t),
-            MathF.Lerp(theme[Value].b, theme[second.Value].b, t),
-            MathF.Lerp(theme[Value].a, theme[second.Value].a, t));
+            Mathf.LerpUnclamped(theme[Value].r, theme[second.Value].r, t),
+            Mathf.LerpUnclamped(theme[Value].g, theme[second.Value].g, t),
+            Mathf.LerpUnclamped(theme[Value].b, theme[second.Value].b, t),
+            Mathf.LerpUnclamped(theme[Value].a, theme[second.Value].a, t));
     }
 }

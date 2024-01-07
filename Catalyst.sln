@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LegacyCatalyst", "LegacyCat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalyst.Engine", "Catalyst.Engine\Catalyst.Engine.csproj", "{841CA236-78CD-497F-9311-8ADCF8D760A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalyst.Common", "Catalyst.Common\Catalyst.Common.csproj", "{E042B952-B806-4822-A0DF-A1369D296F28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{841CA236-78CD-497F-9311-8ADCF8D760A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{841CA236-78CD-497F-9311-8ADCF8D760A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{841CA236-78CD-497F-9311-8ADCF8D760A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E042B952-B806-4822-A0DF-A1369D296F28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E042B952-B806-4822-A0DF-A1369D296F28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E042B952-B806-4822-A0DF-A1369D296F28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E042B952-B806-4822-A0DF-A1369D296F28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

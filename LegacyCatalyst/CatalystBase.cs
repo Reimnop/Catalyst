@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using Catalyst.Common;
 using Catalyst.Logic;
 using Catalyst.Patch;
 using HarmonyLib;
@@ -6,22 +7,12 @@ using UnityEngine;
 
 namespace Catalyst;
 
-[BepInPlugin(Guid, Name, Version)]
+[BepInPlugin(ModMetadata.Guid, ModMetadata.Name, ModMetadata.Version)]
 [BepInProcess("Project Arrhythmia.exe")]
 public class CatalystBase : BaseUnityPlugin
 {
     // I have become the very thing I swore to destroy
     public static CatalystBase Instance;
-    
-    public const string Guid = "me.reimnop.catalyst";
-    public const string Name = "Catalyst";
-#if DEBUG
-    public const string Version = "2.2.0 [DEBUG]";
-#else
-    public const string Version = "2.2.0";
-#endif
-
-    public const string Description = "Next-generation performance mod for Project Arrhythmia - Successor of Potassium";
 
     private Harmony harmony;
     private LevelProcessor levelProcessor;
@@ -50,7 +41,7 @@ public class CatalystBase : BaseUnityPlugin
         
         LogInfo("Patching Project Arrhythmia");
         
-        harmony = new Harmony(Guid);
+        harmony = new Harmony(ModMetadata.Guid);
         harmony.PatchAll();
         
         LogInfo("Attaching hooks");
@@ -59,7 +50,7 @@ public class CatalystBase : BaseUnityPlugin
         GameManagerPatch.LevelEnd += OnLevelEnd;
         ObjectManagerPatch.LevelTick += OnLevelTick;
 
-        LogInfo($"{Name} is initialized and ready!");
+        LogInfo($"{ModMetadata.Name} is initialized and ready!");
     }
 
     private void OnLevelStart()
