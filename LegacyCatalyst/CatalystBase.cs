@@ -27,6 +27,7 @@ public class CatalystBase : BaseUnityPlugin
     private LevelProcessor levelProcessor;
     
     private float previousAudioTime;
+    private float audioTimeVelocity;
     
     public static void LogInfo(object msg)
     {
@@ -66,6 +67,7 @@ public class CatalystBase : BaseUnityPlugin
         LogInfo("Loading level");
         
         previousAudioTime = 0.0f;
+        audioTimeVelocity = 0.0f;
         levelProcessor = new LevelProcessor(DataManager.inst.gameData);
     }
     
@@ -80,9 +82,7 @@ public class CatalystBase : BaseUnityPlugin
     private void OnLevelTick()
     {
         var currentAudioTime = AudioManager.inst.CurrentAudioSource.time;
-        var audioDeltaTime = currentAudioTime - previousAudioTime;
-        var velocity = audioDeltaTime / Time.deltaTime;
-        var smoothedTime = Mathf.SmoothDamp(previousAudioTime, currentAudioTime, ref velocity, Time.deltaTime);
+        var smoothedTime = Mathf.SmoothDamp(previousAudioTime, currentAudioTime, ref audioTimeVelocity, Time.deltaTime);
         levelProcessor?.Update(smoothedTime);
         previousAudioTime = currentAudioTime;
     }
