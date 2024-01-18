@@ -9,7 +9,6 @@ namespace Catalyst.Logic;
 
 public class LevelProcessor : IDisposable
 {
-    private readonly Level<ILevelObject> level;
     private readonly CatalystEngine engine;
 
     public LevelProcessor(GameData gameData)
@@ -18,7 +17,7 @@ public class LevelProcessor : IDisposable
         var converter = new GameDataLevelObjectsConverter(gameData);
         var levelObjects = converter.ToLevelObjects();
 
-        level = new Level<ILevelObject>(levelObjects);
+        var level = new Level<ILevelObject>(levelObjects);
         engine = new CatalystEngine(level.View);
 
         CatalystBase.LogInfo($"Loaded {level.Objects.Count} objects (original: {gameData.beatmapObjects.Count})");
