@@ -55,7 +55,7 @@ public class CatalystBase : BasePlugin
         // GameManagerPatch.LevelStart += OnLevelStart;
         
         GameManagerPatch.LevelEnd += OnLevelEnd;
-        GameManager2Patch.LevelTick += OnLevelTick;
+        ObjectManagerPatch.LevelTick += OnLevelTick;
         
         LogInfo($"{PluginInfo.PLUGIN_NAME} is initialized and ready!");
     }
@@ -82,6 +82,7 @@ public class CatalystBase : BasePlugin
         if (levelProcessor == null && DataManager.inst.gameData.beatmapObjects.Count > 0)
         {
             OnLevelStart();
+            return;
         }
         
         var currentAudioTime = AudioManager.inst.CurrentAudioSource.time;

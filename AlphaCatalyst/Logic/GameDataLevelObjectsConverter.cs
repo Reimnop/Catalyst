@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using Il2CppSystem.Collections.Generic;
 using Catalyst.Engine.Core;
 using Catalyst.Engine.Core.Animation;
 using Catalyst.Engine.Core.Animation.Keyframe;
@@ -10,7 +9,6 @@ using UnityEngine;
 
 using GameData = DataManager.GameData;
 using BeatmapObject = DataManager.GameData.BeatmapObject;
-using EventKeyframe = DataManager.GameData.EventKeyframe;
 using Object = UnityEngine.Object;
 using ObjectType = DataManager.GameData.BeatmapObject.ObjectType;
 
@@ -113,7 +111,9 @@ public class GameDataLevelObjectsConverter
             parent = InitParentChain(beatmapObjects[beatmapObject.parent], parentObjects);
         }
         
-        var baseObject = (GameObject) Object.Instantiate(ObjectManager.inst.objectPrefabs[beatmapObject.shape].options[beatmapObject.shapeOption], parent == null ? null : parent.transform);
+        var baseObject = Object
+            .Instantiate(ObjectManager.inst.objectPrefabs[beatmapObject.shape].options[beatmapObject.shapeOption], parent == null ? null : parent.transform)
+            .Cast<GameObject>();
         parentObjects.Insert(0, InitLevelParentObject(beatmapObject, baseObject));
         
         parentObjects[parentObjects.Count - 1].Transform.SetParent(ObjectManager.inst.objectParent.transform);
@@ -196,7 +196,7 @@ public class GameDataLevelObjectsConverter
             var value = new Vector2(eventKeyframe.Vals[0], eventKeyframe.Vals[1]);
             if (eventKeyframe.Random != 0)
             {
-                ObjectHelpers.RandomVector2Parser(eventKeyframe, out var x, out var y);
+                ObjectManager.inst.RandomVector2Parser(eventKeyframe, out var x, out var y);
                 value.x = x;
                 value.y = y;
             }
@@ -225,7 +225,7 @@ public class GameDataLevelObjectsConverter
             var value = eventKeyframe.Vals[0];
             if (eventKeyframe.Random != 0)
             {
-                ObjectHelpers.RandomFloatParser(eventKeyframe, out value);
+                ObjectManager.inst.RandomFloatParser(eventKeyframe, out value);
             }
 
             currentValue = relative ? currentValue + value : value;

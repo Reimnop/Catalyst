@@ -13,7 +13,7 @@ public class TextObject : VisualObject
         this.opacity = opacity;
         
         textMeshPro = gameObject.GetComponent<TextMeshPro>();
-        // textMeshPro.enabled = true;
+        textMeshPro.enabled = true;
         textMeshPro.text = text;
     }
     

@@ -76,6 +76,9 @@
       <Reference Include="UnityEngine.Physics2DModule">
         <HintPath>UnityEngine.Physics2DModule.dll</HintPath>
       </Reference>
+      <Reference Include="UnityEngine.UI">
+        <HintPath>UnityEngine.UI.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
     <ItemGroup>

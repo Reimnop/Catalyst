@@ -25,7 +25,7 @@ public class GameManagerPatch
     
     [HarmonyPatch(nameof(GameManager.ExitLevel))]
     [HarmonyPostfix]
-    public static void ExitLevelPostfix()
+    public static void EndOfLevelPostfix()
     {
         if (Utils.IsInEditor())
         {
