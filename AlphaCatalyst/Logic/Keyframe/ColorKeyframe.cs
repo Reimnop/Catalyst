@@ -1,20 +1,17 @@
-﻿using Catalyst.Engine.Core.Animation;
+﻿using System.Collections.Generic;
+using Catalyst.Engine.Core.Animation;
 using Catalyst.Engine.Core.Animation.Keyframe;
-using Il2CppSystem.Collections.Generic;
 using UnityEngine;
 
-namespace Catalyst.Logic;
+namespace Catalyst.Logic.Keyframe;
 
-/// <summary>
-/// A keyframe that animates a theme color value.
-/// </summary>
 public struct ColorKeyframe : IKeyframe<Color>
 {
     public float Time { get; set; }
-    public EaseFunction Ease { get; set; }
+    public Engine.Core.Animation.EaseFunction Ease { get; set; }
     public int Value { get; set; }
     
-    public ColorKeyframe(float time, int value, EaseFunction ease)
+    public ColorKeyframe(float time, int value, Engine.Core.Animation.EaseFunction ease)
     {
         Time = time;
         Value = value;
@@ -25,12 +22,11 @@ public struct ColorKeyframe : IKeyframe<Color>
     {
         var theme = GameManager.inst.LiveTheme.objectColors;
         var second = (ColorKeyframe) other;
-        
         var t = second.Ease(time);
         return new Color(
             Mathf.LerpUnclamped(theme[Value].r, theme[second.Value].r, t),
             Mathf.LerpUnclamped(theme[Value].g, theme[second.Value].g, t),
-            Mathf.LerpUnclamped(theme[Value].b, theme[second.Value].b, t),
-            Mathf.LerpUnclamped(theme[Value].a, theme[second.Value].a, t));
+           Mathf.LerpUnclamped(theme[Value].b, theme[second.Value].b, t),
+           Mathf.LerpUnclamped(theme[Value].a, theme[second.Value].a, t));
     }
 }

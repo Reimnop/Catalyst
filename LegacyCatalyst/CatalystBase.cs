@@ -1,5 +1,4 @@
 ﻿using BepInEx;
-using Catalyst.Common;
 using Catalyst.Logic;
 using Catalyst.Patch;
 using HarmonyLib;
@@ -7,7 +6,7 @@ using UnityEngine;
 
 namespace Catalyst;
 
-[BepInPlugin(ModMetadata.Guid, ModMetadata.Name, ModMetadata.Version)]
+[BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
 [BepInProcess("Project Arrhythmia.exe")]
 public class CatalystBase : BaseUnityPlugin
 {
@@ -41,7 +40,7 @@ public class CatalystBase : BaseUnityPlugin
         
         LogInfo("Patching Project Arrhythmia");
         
-        harmony = new Harmony(ModMetadata.Guid);
+        harmony = new Harmony(PluginInfo.PLUGIN_GUID);
         harmony.PatchAll();
         
         LogInfo("Attaching hooks");
@@ -50,7 +49,7 @@ public class CatalystBase : BaseUnityPlugin
         GameManagerPatch.LevelEnd += OnLevelEnd;
         ObjectManagerPatch.LevelTick += OnLevelTick;
 
-        LogInfo($"{ModMetadata.Name} is initialized and ready!");
+        LogInfo($"{PluginInfo.PLUGIN_NAME} is initialized and ready!");
     }
 
     private void OnLevelStart()

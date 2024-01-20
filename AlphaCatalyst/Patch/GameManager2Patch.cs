@@ -5,12 +5,12 @@ namespace Catalyst.Patch;
 
 public delegate void LevelTickEventHandler();
 
-[HarmonyPatch(typeof(ObjectManager))]
-public class ObjectManagerPatch
+[HarmonyPatch(typeof(GameManager2))]
+public class GameManager2Patch
 {
     public static event LevelTickEventHandler LevelTick;
 
-    [HarmonyPatch("Update")]
+    [HarmonyPatch(nameof(GameManager2.Update))]
     [HarmonyPrefix]
     public static bool UpdatePrefix()
     {

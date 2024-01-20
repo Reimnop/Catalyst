@@ -5,17 +5,15 @@ namespace Catalyst.Logic.Visual;
 
 public class TextObject : VisualObject
 {
-    private readonly GameObject gameObject;
     private readonly TextMeshPro textMeshPro;
     private readonly float opacity;
 
     public TextObject(GameObject gameObject, float opacity, string text)
     {
-        this.gameObject = gameObject;
         this.opacity = opacity;
         
         textMeshPro = gameObject.GetComponent<TextMeshPro>();
-        textMeshPro.enabled = true;
+        // textMeshPro.enabled = true;
         textMeshPro.text = text;
     }
     

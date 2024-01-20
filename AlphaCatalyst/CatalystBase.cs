@@ -1,34 +1,27 @@
 ﻿using BepInEx;
-using BepInEx.IL2CPP;
 using BepInEx.Logging;
+using BepInEx.Unity.IL2CPP;
 using Catalyst.Logic;
 using Catalyst.Patch;
-using Catalyst.UI;
 using HarmonyLib;
+using UnityEngine;
 
 namespace Catalyst;
 
-[BepInPlugin(Guid, Name, Version)]
+[BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
 [BepInProcess("Project Arrhythmia.exe")]
 public class CatalystBase : BasePlugin
 {
     // I have become the very thing I swore to destroy
     public static CatalystBase Instance;
     
-    public const string Guid = "me.reimnop.catalyst";
-    public const string Name = "Catalyst";
-#if DEBUG
-    public const string Version = "2.1.2 [DEBUG]";
-#else
-    public const string Version = "2.1.2";
-#endif
-
-    public const string Description = "Next-generation performance mod for Project Arrhythmia - Successor of Potassium";
-
     public ManualLogSource Logger { get; private set; }
 
     private Harmony harmony;
     private LevelProcessor levelProcessor;
+    
+    private float previousAudioTime;
+    private float audioTimeVelocity;
     
     public static void LogInfo(object msg)
     {
@@ -49,11 +42,11 @@ public class CatalystBase : BasePlugin
     {
         Instance = this;
         
-        Logger = BepInEx.Logging.Logger.CreateLogSource(Name);
+        Logger = BepInEx.Logging.Logger.CreateLogSource(PluginInfo.PLUGIN_NAME);
         
         LogInfo("Patching Project Arrhythmia");
         
-        harmony = new Harmony(Guid);
+        harmony = new Harmony(PluginInfo.PLUGIN_GUID);
         harmony.PatchAll();
         
         LogInfo("Attaching hooks");
@@ -62,13 +55,9 @@ public class CatalystBase : BasePlugin
         // GameManagerPatch.LevelStart += OnLevelStart;
         
         GameManagerPatch.LevelEnd += OnLevelEnd;
-        ObjectManagerPatch.LevelTick += OnLevelTick;
+        GameManager2Patch.LevelTick += OnLevelTick;
         
-        // Patch the in-game UI
-        ResourcePatch.Init(harmony);
-        ResourcePatch.RegisterPatcher("menu_yaml_english", new MainMenuEnglishPatcher());
-        
-        LogInfo($"{Name} is initialized and ready!");
+        LogInfo($"{PluginInfo.PLUGIN_NAME} is initialized and ready!");
     }
 
     private void OnLevelStart()
@@ -95,6 +84,9 @@ public class CatalystBase : BasePlugin
             OnLevelStart();
         }
         
-        levelProcessor?.Update(AudioManager.inst.CurrentAudioSource.time);
+        var currentAudioTime = AudioManager.inst.CurrentAudioSource.time;
+        var smoothedTime = Mathf.SmoothDamp(previousAudioTime, currentAudioTime, ref audioTimeVelocity, 1.0f / 50.0f);
+        levelProcessor?.Update(smoothedTime);
+        previousAudioTime = smoothedTime;
     }
 }

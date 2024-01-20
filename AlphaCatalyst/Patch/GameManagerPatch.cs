@@ -11,7 +11,7 @@ public class GameManagerPatch
     public static event LevelEventHandler LevelStart;
     public static event LevelEventHandler LevelEnd;
     
-    [HarmonyPatch("PlayLevel")]
+    [HarmonyPatch(nameof(GameManager.PlayLevel))]
     [HarmonyPostfix]
     public static void PlayLevelPostfix()
     {
@@ -23,7 +23,7 @@ public class GameManagerPatch
         LevelStart?.Invoke();
     }
     
-    [HarmonyPatch("ExitLevel")]
+    [HarmonyPatch(nameof(GameManager.ExitLevel))]
     [HarmonyPostfix]
     public static void ExitLevelPostfix()
     {
