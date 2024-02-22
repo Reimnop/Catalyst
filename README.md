@@ -2,51 +2,31 @@
 
 # Catalyst
 
- Next-generation performance mod for Project Arrhythmia - Successor of Potassium
- 
- Made for the development & legacy branch
- 
- **Does not support the Editor!**
- 
- ## Usage
- 
-### For default branch
+A next-generation performance mod for Project Arrhythmia &mdash; Successor of Potassium.
 
-> [As of December 28th, 2022, this mod no longer works on `editor-alpha` branch due to BepInEx not working properly on it. Unfortunately, there is nothing that can be done on my side and requires BepInEx to fix it on their side.](https://github.com/BepInEx/BepInEx/issues/536)
+**Does not enhance the Editor!**
 
-- Download [BepInEx 6 x64 IL2CPP](https://github.com/BepInEx/BepInEx/releases/tag/v6.0.0-pre.1) (The file that says `BepInEx_UnityIL2CPP_x64_6.0.0-pre.1.zip`)
-- To open `Project Arrhythmia Path`, go to `Project Arrhythmia` in your Steam library, click the `Settings` icon, go to `Local files` and click `Browse`
-- Extract the downloaded zip file into `<Project Arrhythmia Path>` using [WinRAR](https://www.rarlab.com/) or [7-zip](https://www.7-zip.org/)
-- Launch Project Arrhythmia
-- If you have done everything correctly, there should be a `plugins` folder in `<Project Arrhythmia Path>/BepInEx`
-- Close Project Arrhythmia
-- Drop the [AlphaCatalyst DLL](https://github.com/Reimnop/Catalyst/releases) and the [Catalyst.Engine DLL](https://github.com/Reimnop/Catalyst/releases) into the `plugins` folder
-- The mod is now installed, you can now enjoy your boosted framerate
+## Installation
+> [!WARNING]\
+> Catalyst does not work on the `alpha` branch. This is an [issue with BepInEx](https://github.com/BepInEx/BepInEx/issues/536), not Catalyst.
 
-### For legacy branch
+1. Open the **Project Arrhythmia folder**.
+	- ℹ️ _Right-click on **Project Arrhythmia** in your Steam library > **Manage** > **Browse local files**._
+1. Download the corresponding version of **BepInEx** and copy the contents of the archive into the **Project Arrhythmia folder**:
+	- For **\[21.12.2\]** *(default branch)* get [BepInEx 6 x64 IL2CPP](https://github.com/BepInEx/BepInEx/releases/download/v6.0.0-pre.1/BepInEx_UnityIL2CPP_x64_6.0.0-pre.1.zip).
+	- For **\[20.4.4\]** *(legacy branch)* get [BepInEx 5 x64](https://github.com/BepInEx/BepInEx/releases/download/v5.4.21/BepInEx_x64_5.4.21.0.zip).
+	- ℹ️ _If you can't open the archive, try using [7-Zip archiver](https://7-zip.org/)._
+1. Launch Project Arrhythmia once and then close it.
+1. In the Project Arrhythmia folder, go to `BepInEx` > `plugins`.
+	- ℹ️ _If you do not see the folder, then you haven't installed BepInEx properly. Try following the previous steps again, or ask for help._
+1. Download the corresponding version of [Catalyst, and Catalyst.Engine](https://github.com/Reimnop/Catalyst/releases) and move them into the `plugins` folder.
+	- For **\[21.12.2\]** *(default branch)* get both **AlphaCatalyst.dll**, and **Catalyst.Engine.dll**.
+	- For **\[20.4.4\]** *(legacy branch)* get both **LegacyCatalyst.dll**, and **Catalyst.Engine.dll**.
+1. Catalyst is now installed! Enjoy your boosted framerate.
 
-- Download [BepInEx 5 x64](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.21) (The file that says `BepInEx_x64_5.4.21.0.zip`)
-- To open `Project Arrhythmia Path`, go to `Project Arrhythmia` in your Steam library, click the `Settings` icon, go to `Local files` and click `Browse`
-- Extract the downloaded zip file into `<Project Arrhythmia Path>` using [WinRAR](https://www.rarlab.com/) or [7-zip](https://www.7-zip.org/)
-- Launch Project Arrhythmia
-- If you have done everything correctly, there should be a `plugins` folder in `<Project Arrhythmia Path>/BepInEx`
-- Close Project Arrhythmia
-- Drop the [LegacyCatalyst DLL](https://github.com/Reimnop/Catalyst/releases) and the [Catalyst.Engine DLL](https://github.com/Reimnop/Catalyst/releases) into the `plugins` folder
-- The mod is now installed, you can now enjoy your boosted framerate
- 
- ### For development branch
- 
-- Download the core libraries from [BepInEx](https://unity.bepinex.dev/corlibs/2019.3.12.zip)
-- Download the Unity libraries also from [BepInEx](https://unity.bepinex.dev/libraries/2019.3.12.zip)
+<details>
+	<summary><h2>Removal</h2></summary>
 
-Those steps are required because the development branch DLLs are stripped so we need the original DLLs to unstrip them (otherwise BepInEx won't load)
-
-- Extract everything inside the core libraries zip file from BepInEx into `<Project Arrhythmia Path>/Project Arrhythmia_Data/Managed`, choose Replace All
-- Extract everything inside the Unity libraries zip file from BepInEx into `<Project Arrhythmia Path>/Project Arrhythmia_Data/Managed`, also choose Replace All
-- Download [BepInEx 5 x64](https://github.com/BepInEx/BepInEx/releases)
-- Extract the downloaded zip file into `<Project Arrhythmia Path>`
-- Launch Project Arrhythmia
-- If you have done everything correctly, there should be a `plugins` folder in `<Project Arrhythmia Path>/BepInEx`
-- Close Project Arrhythmia
-- Drop the [DevelopmentCatalyst DLL](https://github.com/Reimnop/Catalyst/releases) and the [Catalyst.Engine DLL](https://github.com/Reimnop/Catalyst/releases) into the `plugins` folder
-- The mod is now installed, you can now enjoy your boosted framerate
+1. Open the **Project Arrhythmia folder**.
+1. Delete the `BepInEx` folder and `changelog.txt`, `doorstop_config.ini`, and `winhttp.dll` files.
+</details>
